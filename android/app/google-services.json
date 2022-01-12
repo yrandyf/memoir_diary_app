@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "229520603967",
+    "project_id": "memoire-8cd82",
+    "storage_bucket": "memoire-8cd82.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229520603967:android:17c28d8a3ea6b3a404718a",
+        "android_client_info": {
+          "package_name": "com.example.memoir_diary_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229520603967-0c5o6uv2bji390mmqoh7gdhpf0ctn7qg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGEaqSh3ohTq9uXA5sdAFjsBbaJCxJ5e4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229520603967-0c5o6uv2bji390mmqoh7gdhpf0ctn7qg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
