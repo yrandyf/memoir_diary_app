@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../screens/signup_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/profile_screen.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
