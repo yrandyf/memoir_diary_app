@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../screens/login_screen.dart';
-import '../screens/profile_screen.dart';
+import '../widgets/tab_widget.dart';
 import '../utils/firebase_user_auth.dart';
 import '../utils/form_validation.dart';
 
@@ -166,8 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                                       .pushAndRemoveUntil(
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ProfilePage(
-                                                              user: user),
+                                                          HomePage(user: user),
                                                     ),
                                                     ModalRoute.withName('/'),
                                                   );

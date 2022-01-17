@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/signup_screen.dart';
+import 'screens/diary_writer_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() async {
@@ -12,14 +13,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: LoginPage(),
-        routes: {
-          SignUpPage.routeName: (ctx) => SignUpPage(),
-          LoginPage.routeName: (ctx) => LoginPage(),
-        });
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginPage(),
+      routes: {
+        SignUpPage.routeName: (ctx) => SignUpPage(),
+        LoginPage.routeName: (ctx) => LoginPage(),
+        DiaryWriterScreen.routeName: (ctx) => DiaryWriterScreen(),
+      },
+    );
   }
 }
