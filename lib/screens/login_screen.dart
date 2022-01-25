@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/tab_widget.dart';
 import '../screens/signup_screen.dart';
-import '../utils/firebase_user_auth.dart';
+import '../services/firebase_user_auth.dart';
 import '../utils/form_validation.dart';
 
 class LoginPage extends StatefulWidget {

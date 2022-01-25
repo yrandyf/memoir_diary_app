@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../screens/login_screen.dart';
 import '../widgets/tab_widget.dart';
-import '../utils/firebase_user_auth.dart';
+import '../services/firebase_user_auth.dart';
 import '../utils/form_validation.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -140,9 +140,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                               'Sign up',
                                             ),
                                             onPressed: () async {
-                                              setState(() {
-                                                _isProcessing = true;
-                                              });
+                                              // setState(
+                                              //   () {
+                                              //     _isProcessing = true;
+                                              //   },
+                                              // );
 
                                               if (_registerFormKey.currentState!
                                                   .validate()) {
@@ -176,7 +178,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                           ),
                                           TextButton(
                                             child: Text(
-                                              "Cancel",
+                                              "Already Have an Account?",
                                               style: TextStyle(
                                                 color: Colors.grey,
                                               ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../screens/home_main_tab.dart';
 import 'side_bar.dart';
 import '../screens/login_screen.dart';
-import '../utils/firebase_user_auth.dart';
+import '../services/firebase_user_auth.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/main';
