@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:memoir_diary_app/screens/login_screen.dart';
+import 'package:memoir_diary_app/services/firebase_user_auth.dart';
 
 class SideBar extends StatelessWidget {
   @override
@@ -18,19 +20,22 @@ class SideBar extends StatelessWidget {
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Cart'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: Icon(Icons.border_color),
-            title: Text('Feedback'),
+            leading: Icon(Icons.settings),
+            title: Text('Settings'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () {
+              FireBaseAuth.logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ),
+              );
+            },
           ),
         ],
       ),

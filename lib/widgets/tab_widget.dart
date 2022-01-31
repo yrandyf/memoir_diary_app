@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../screens/calender_Screen.dart';
 import '../screens/home_main_tab.dart';
 import 'side_bar.dart';
 import '../screens/login_screen.dart';
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         drawer: SideBar(),
         body: NestedScrollView(
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
                 bottom: TabBar(
                   tabs: [
                     Tab(child: Icon(Icons.home)),
+                    Tab(child: Icon(Icons.date_range_rounded)),
                     Tab(child: Icon(Icons.photo_camera_back)),
                     Tab(child: Icon(Icons.map)),
                     Tab(child: Icon(Icons.bar_chart_rounded)),
@@ -55,6 +57,7 @@ class _HomePageState extends State<HomePage> {
           body: TabBarView(
             children: <Widget>[
               MainHomeScreen(),
+              CalendarScreen(),
               Icon(Icons.directions_transit, size: 350),
               Icon(Icons.directions_car, size: 350),
               Icon(Icons.directions_bike, size: 350),

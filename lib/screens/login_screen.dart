@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 35, left: 5, right: 5, bottom: 10),
-                height: 305,
+                height: 370,
                 child: FutureBuilder(
                   future: _initializeFirebase(),
                   builder: (context, snapshot) {
@@ -97,6 +97,9 @@ class _LoginPageState extends State<LoginPage> {
                                       .headline4!
                                       .copyWith(fontWeight: FontWeight.bold),
                                 ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
                                 Form(
                                   key: _formKey,
                                   child: Column(
@@ -109,7 +112,8 @@ class _LoginPageState extends State<LoginPage> {
                                           email: value.toString(),
                                         ),
                                         decoration: InputDecoration(
-                                          hintText: "Email",
+                                          labelText: "Email",
+                                          hintText: "randeep@gmail.com",
                                           prefixIcon: const Icon(
                                             Icons.alternate_email,
                                             size: 20,
@@ -125,14 +129,15 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       const SizedBox(height: 8.0),
                                       TextFormField(
+                                        obscureText: true,
                                         controller: _passwordTextController,
                                         focusNode: _focusPassword,
-                                        obscureText: true,
                                         validator: (value) =>
                                             Validator.validatePassword(
                                           password: value.toString(),
                                         ),
                                         decoration: InputDecoration(
+                                          labelText: "Password",
                                           hintText: "Password",
                                           prefixIcon: const Icon(
                                             Icons.vpn_key_sharp,
@@ -182,9 +187,12 @@ class _LoginPageState extends State<LoginPage> {
 
                                                       if (_formKey.currentState!
                                                           .validate()) {
-                                                        setState(() {
-                                                          _isProcessing = true;
-                                                        });
+                                                        setState(
+                                                          () {
+                                                            _isProcessing =
+                                                                true;
+                                                          },
+                                                        );
 
                                                         User? user = await FireBaseAuth
                                                             .UserLogIn(
@@ -197,9 +205,12 @@ class _LoginPageState extends State<LoginPage> {
                                                                 context:
                                                                     context);
 
-                                                        setState(() {
-                                                          _isProcessing = false;
-                                                        });
+                                                        setState(
+                                                          () {
+                                                            _isProcessing =
+                                                                false;
+                                                          },
+                                                        );
 
                                                         if (user != null) {
                                                           Navigator.of(context)
@@ -241,7 +252,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                     }
-
                     return Center(
                       child: CircularProgressIndicator(),
                     );

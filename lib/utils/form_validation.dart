@@ -18,7 +18,7 @@ class Validator {
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
     if (email.isEmpty) {
-      return 'Email can\'t be empty';
+      return 'Please enter a valid email';
     } else if (!emailRegExp.hasMatch(email)) {
       return 'Enter a correct email';
     }
@@ -31,11 +31,10 @@ class Validator {
       return null;
     }
     if (password.isEmpty) {
-      return 'Password can\'t be empty';
+      return 'Please enter a valid password';
     } else if (password.length < 6) {
-      return 'Enter a password with length at least 6';
+      return 'Password length should be atleast 6 characters!';
     }
-
     return null;
   }
 }
