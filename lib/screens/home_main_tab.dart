@@ -5,6 +5,7 @@ import 'package:memoir_diary_app/widgets/main_screen/flexible_space_widget.dart'
 import 'diary_writer_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
+  static const routeName = '/home';
   const MainHomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,6 +23,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         child: const Icon(Icons.edit_outlined),
       ),
       body: CustomScrollView(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
         slivers: <Widget>[
           SliverAppBar(
             automaticallyImplyLeading: false,
@@ -36,14 +39,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             ),
           ),
           SliverFillRemaining(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // DiaryEntryList(),
-                GetInfo(),
-              ],
-            ),
+            // fillOverscroll: true,
+            hasScrollBody: true,
+            child: GetInfo(),
           ),
         ],
       ),

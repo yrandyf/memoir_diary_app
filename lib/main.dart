@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/firebase_options.dart';
 import '../screens/signup_screen.dart';
+import 'screens/add_photos.dart';
 import 'screens/diary_writer_screen.dart';
+import 'screens/home_main_tab.dart';
 import 'screens/login_screen.dart';
 
 void main() async {
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
         SignUpPage.routeName: (ctx) => SignUpPage(),
         LoginPage.routeName: (ctx) => LoginPage(),
         DiaryWriterScreen.routeName: (ctx) => DiaryWriterScreen(),
+        MainHomeScreen.routeName: (ctx) => MainHomeScreen(),
+        // ImagePickerScreen.routeName: (ctx) => ImagePickerScreen(),
       },
     );
   }

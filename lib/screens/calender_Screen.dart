@@ -9,20 +9,29 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
+  DateTime selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Expanded(
-            child: SfDateRangePicker(
-              onSelectionChanged: (value) {
-                print(value.value);
-              },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SfDateRangePicker(
+                onSelectionChanged: (pickedDate) {
+                  setState(
+                    () {
+                      selectedDate = pickedDate.value;
+                      print(selectedDate);
+                    },
+                  );
+                },
+              ),
             ),
-          ),
+          ],
         ),
+        Row()
       ],
     );
   }

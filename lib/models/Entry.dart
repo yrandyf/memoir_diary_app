@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DiaryEntry {
+class Entry {
   final String? entryId;
   final List<dynamic>? content;
+  final String? contentSummery;
   final DateTime? date;
   final String? location;
   final String? position;
@@ -11,7 +12,8 @@ class DiaryEntry {
   final Timestamp? timeStamp;
   final String? userId;
 
-  DiaryEntry({
+  Entry({
+    this.contentSummery,
     this.userId,
     this.photos,
     this.entryId,
@@ -23,16 +25,17 @@ class DiaryEntry {
     this.timeStamp,
   });
 
-  factory DiaryEntry.fromDocument(QueryDocumentSnapshot data) {
-    return DiaryEntry(
+  factory Entry.fromDocument(QueryDocumentSnapshot data) {
+    return Entry(
       entryId: data.id,
       userId: data.get('uid'),
       photos: data.get('photo_list'),
       content: data.get('content'),
-      date: data.get('entry_date'),
+      date: data.get('entry_date').toDate(),
       location: data.get('location'),
       position: data.get('position'),
       mood: data.get('mood'),
+      contentSummery: data.get('content_summery'),
       timeStamp: data.get('time_stamp'),
     );
   }
@@ -46,7 +49,8 @@ class DiaryEntry {
       'location': location,
       'position': position,
       'mood': mood,
-      'time_stamp': timeStamp
+      'time_stamp': timeStamp,
+      'content_summery': contentSummery
     };
   }
 }
