@@ -109,126 +109,122 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
               ),
             ),
           ),
-          SliverFillRemaining(
-            hasScrollBody: true,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  margin: const EdgeInsets.only(right: 5),
-                                  child: Text(
-                                    DateFormat('dd')
-                                        .format(selectedEntry.date as DateTime),
-                                    style: const TextStyle(fontSize: 50),
-                                  ),
-                                ),
-                              ],
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(right: 5),
+                            child: Text(
+                              DateFormat('dd')
+                                  .format(selectedEntry.date as DateTime),
+                              style: const TextStyle(fontSize: 50),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  (DateFormat('MMMM, yyyy')
-                                      .format(selectedEntry.date as DateTime)),
-                                  style: const TextStyle(fontSize: 25),
-                                ),
-                                Text(
-                                  DateFormat('EEEE, HH:mm a')
-                                      .format(selectedEntry.date as DateTime),
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            )
-                          ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            (DateFormat('MMMM, yyyy')
+                                .format(selectedEntry.date as DateTime)),
+                            style: const TextStyle(fontSize: 25),
+                          ),
+                          Text(
+                            DateFormat('EEEE, HH:mm a')
+                                .format(selectedEntry.date as DateTime),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      Chip(
+                        labelPadding: const EdgeInsets.only(
+                            left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
+                        avatar: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.location_on_outlined),
                         ),
-                        Chip(
+                        padding: EdgeInsets.all(0),
+                        backgroundColor: Colors.white,
+                        label: Text(selectedEntry.location.toString()),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Chip(
                           labelPadding: const EdgeInsets.only(
                               left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                           avatar: IconButton(
                             onPressed: () {},
-                            icon: Icon(Icons.location_on_outlined),
+                            icon: Icon(Icons.accessibility),
                           ),
                           padding: EdgeInsets.all(0),
                           backgroundColor: Colors.white,
-                          label: Flexible(
-                              child: Text(selectedEntry.location.toString())),
+                          label: Text(selectedEntry.position.toString()),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Chip(
-                            labelPadding: const EdgeInsets.only(
-                                left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
-                            avatar: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.accessibility),
-                            ),
-                            padding: EdgeInsets.all(0),
-                            backgroundColor: Colors.white,
-                            label: Flexible(
-                                child: Text(selectedEntry.position.toString())),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Chip(
+                          labelPadding: const EdgeInsets.only(
+                              left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
+                          avatar: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.tag_faces_outlined),
                           ),
+                          padding: EdgeInsets.all(0),
+                          backgroundColor: Colors.white,
+                          label: Text(selectedEntry.mood.toString()),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Chip(
-                            labelPadding: const EdgeInsets.only(
-                                left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
-                            avatar: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.tag_faces_outlined),
-                            ),
-                            padding: EdgeInsets.all(0),
-                            backgroundColor: Colors.white,
-                            label: Flexible(
-                                child: Text(selectedEntry.mood.toString())),
-                          ),
-                        ),
-                        // const SizedBox(
-                        //   width: 10,
-                        // ),
-                        // Align(
-                        //   alignment: Alignment.bottomLeft,
-                        //   child:
-                        // ),
-                      ],
-                    ),
-                    Divider(),
-                    quill.QuillEditor(
-                      controller: _controller,
-                      readOnly: true,
-                      scrollController: ScrollController(),
-                      scrollable: true,
-                      focusNode: FocusNode(),
-                      autoFocus: false,
-                      expands: false,
-                      maxHeight: null,
-                      minHeight: null,
-                      padding: EdgeInsets.zero,
-                      showCursor: false,
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
+              ],
+            ),
+          ),
+          SliverFillRemaining(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: quill.QuillEditor(
+                controller: _controller,
+                readOnly: true,
+                scrollController: ScrollController(),
+                scrollable: true,
+                focusNode: FocusNode(),
+                autoFocus: false,
+                expands: false,
+                maxHeight: null,
+                minHeight: null,
+                padding: EdgeInsets.zero,
+                showCursor: false,
               ),
             ),
           ),

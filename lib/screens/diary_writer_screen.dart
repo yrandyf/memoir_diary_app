@@ -144,7 +144,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                         });
                       } else {
                         setState(() {
-                          _displayDialog(context, _images, chooseImages);
+                          _displayImagePicker(context, _images, chooseImages);
                         });
                       }
                       print(_images);
@@ -164,7 +164,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                       }
                     } else {
                       setState(() {
-                        _displayDialog(context, _images, chooseImages);
+                        _displayImagePicker(context, _images, chooseImages);
                       });
                     }
 
@@ -317,7 +317,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   }
 }
 
-_displayDialog(BuildContext context, _images, chooseImages) async {
+_displayImagePicker(BuildContext context, _images, chooseImages) async {
   return showDialog(
     context: context,
     builder: (context) {
