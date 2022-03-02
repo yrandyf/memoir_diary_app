@@ -1,19 +1,25 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/firebase_options.dart';
+import 'package:provider/provider.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/activty_temp.dart';
 import 'screens/diary_writer_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/view_entry_screen.dart';
+import 'services/images_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<ImagesService>(
+      create: (context) => ImagesService(),
+    ),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
