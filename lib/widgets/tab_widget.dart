@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../screens/calender_Screen.dart';
-import '../screens/home_main_tab.dart';
+import '../screens/tabs/tab_2/calender_screen.dart';
+import '../screens/tabs/tab_1_main/home_main_tab.dart';
 import 'side_bar.dart';
-import '../screens/login_screen.dart';
+import '../screens/auth/login_screen.dart';
 import '../services/firebase_user_auth.dart';
 
 class HomePage extends StatefulWidget {

@@ -8,14 +8,14 @@ class Entry {
   final String? location;
   final String? position;
   final String? mood;
-  final String? photos;
+  final List<dynamic>? image_list;
   final Timestamp? timeStamp;
   final String? userId;
 
   Entry({
     this.contentSummery,
     this.userId,
-    this.photos,
+    this.image_list,
     this.entryId,
     this.content,
     this.date,
@@ -29,7 +29,7 @@ class Entry {
     return Entry(
       entryId: data.id,
       userId: data.get('uid'),
-      photos: data.get('photo_list'),
+      image_list: data.get('photo_list'),
       content: data.get('content'),
       date: data.get('entry_date').toDate(),
       location: data.get('location'),
@@ -43,7 +43,7 @@ class Entry {
   Map<String, dynamic> toMap() {
     return {
       'uid': userId,
-      'photo_list': photos,
+      'photo_list': image_list,
       'content': content,
       'entry_date': date,
       'location': location,

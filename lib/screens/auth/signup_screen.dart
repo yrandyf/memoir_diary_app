@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../screens/login_screen.dart';
-import '../widgets/tab_widget.dart';
-import '../services/firebase_user_auth.dart';
-import '../utils/form_validation.dart';
+import 'login_screen.dart';
+import '../../widgets/tab_widget.dart';
+import '../../services/firebase_user_auth.dart';
+import '../../utils/form_validation.dart';
 
 class SignUpPage extends StatefulWidget {
   static const routeName = '/signUp';

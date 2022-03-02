@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../widgets/tab_widget.dart';
-import '../screens/signup_screen.dart';
-import '../services/firebase_user_auth.dart';
-import '../utils/form_validation.dart';
+import '../../widgets/tab_widget.dart';
+import 'signup_screen.dart';
+import '../../services/firebase_user_auth.dart';
+import '../../utils/form_validation.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/logIn';
@@ -194,8 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                                                           },
                                                         );
 
-                                                        User? user = await FireBaseAuth
-                                                            .UserLogIn(
+                                                        User? user = await FireBaseAuth.UserLogIn(
                                                                 email:
                                                                     _emailTextController
                                                                         .text,
@@ -203,7 +202,11 @@ class _LoginPageState extends State<LoginPage> {
                                                                     _passwordTextController
                                                                         .text,
                                                                 context:
-                                                                    context);
+                                                                    context)
+                                                            .then((_) {
+                                                          print(
+                                                              'User Logged in');
+                                                        });
 
                                                         setState(
                                                           () {
