@@ -58,9 +58,9 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               MainHomeScreen(),
               CalendarScreen(),
-              Icon(Icons.directions_transit, size: 350),
-              Icon(Icons.directions_car, size: 350),
-              Icon(Icons.directions_bike, size: 350),
+              Icon(Icons.date_range, size: 350),
+              Icon(Icons.photo_camera_back, size: 350),
+              Icon(Icons.bar_chart, size: 350),
             ],
           ),
         ),

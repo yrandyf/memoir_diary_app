@@ -18,10 +18,8 @@ class ImagesService extends ChangeNotifier {
     } else {
       images.add(File(pickedImages.path));
       notifyListeners();
-      //
     }
-
-    if (pickedImages?.path == null) retrieveLostData();
+    if (pickedImages.path == null) retrieveLostData();
   }
 
   Future<void> retrieveLostData() async {
@@ -30,8 +28,8 @@ class ImagesService extends ChangeNotifier {
       return;
     }
     if (response.file != null) {
-      notifyListeners();
       images.add(File(response.file!.path));
+      notifyListeners();
     } else {
       print(response.file);
     }
@@ -48,6 +46,7 @@ class ImagesService extends ChangeNotifier {
           await ref!.getDownloadURL().then(
             (value) {
               tempImageList.add(value);
+              notifyListeners();
               print(tempImageList.length);
             },
           );

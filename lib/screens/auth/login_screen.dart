@@ -203,11 +203,12 @@ class _LoginPageState extends State<LoginPage> {
                                                                         .text,
                                                                 context:
                                                                     context)
-                                                            .then((_) {
-                                                          print(
-                                                              'User Logged in');
-                                                        });
-
+                                                            .then(
+                                                          (_) {
+                                                            print(
+                                                                'User Logged in');
+                                                          },
+                                                        );
                                                         setState(
                                                           () {
                                                             _isProcessing =

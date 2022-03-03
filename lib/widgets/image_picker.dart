@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../services/images_service.dart';
 
-displayImagePicker(BuildContext context, _images) async {
+displayImagePicker(BuildContext context, images) async {
   return showDialog(
     context: context,
     builder: (context) {
@@ -14,7 +14,7 @@ displayImagePicker(BuildContext context, _images) async {
             width: MediaQuery.of(context).size.width * .9,
             child: GridView.builder(
               shrinkWrap: true,
-              itemCount: _images.length + 1,
+              itemCount: images.length + 1,
               gridDelegate:
                   SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
               itemBuilder: (context, index) {
@@ -26,13 +26,14 @@ displayImagePicker(BuildContext context, _images) async {
                             Provider.of<ImagesService>(context, listen: false)
                                 .chooseImages();
                             Navigator.of(context).pop();
+                            setState(() {});
                           },
                         ),
                       )
                     : GestureDetector(
                         onDoubleTap: () {
                           setState(() {
-                            _images.removeAt(index - 1);
+                            images.removeAt(index - 1);
                           });
                         },
                         child: Container(
@@ -41,7 +42,7 @@ displayImagePicker(BuildContext context, _images) async {
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: FileImage(
-                                _images[index - 1],
+                                images[index - 1],
                               ),
                             ),
                           ),

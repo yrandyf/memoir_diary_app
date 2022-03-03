@@ -54,7 +54,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
             actions: [
               IconButton(
                   onPressed: () {
-                    print(selectedEntry.date);
+                    print(selectedEntry.image_list![0]);
                   },
                   icon: const Icon(Icons.edit)),
               IconButton(
@@ -83,8 +83,6 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.all(0),
-                          margin: const EdgeInsets.all(1),
                           child: Image.network(
                             selectedEntry.image_list![index],
                             fit: BoxFit.cover,

@@ -9,6 +9,7 @@ import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/view_entry_screen.dart';
 import 'services/images_service.dart';
+import 'services/location_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,9 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ImagesService>(
       create: (context) => ImagesService(),
+    ),
+    ChangeNotifierProvider<LocationService>(
+      create: (context) => LocationService(),
     ),
   ], child: MyApp()));
 }
