@@ -501,7 +501,7 @@ _displayImagePicker(BuildContext context, _images, chooseImages) async {
                     : GestureDetector(
                         onDoubleTap: () {
                           setState(() {
-                            _images.removeAt(index - 1);
+                            // _images.removeAt(index - 1);
                           });
                         },
                         child: Container(
