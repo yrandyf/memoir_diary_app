@@ -9,7 +9,7 @@ displayImagePicker(BuildContext context, images) async {
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: Text('Add Images to your Diary Entry'),
+          title: const Text('Add Images to Your Entry'),
           content: Container(
             width: MediaQuery.of(context).size.width * .9,
             child: GridView.builder(
@@ -24,7 +24,7 @@ displayImagePicker(BuildContext context, images) async {
                           icon: Icon(Icons.add_a_photo_rounded),
                           onPressed: () {
                             Provider.of<ImagesService>(context, listen: false)
-                                .chooseImages();
+                                .chooseImages(images);
                             Navigator.of(context).pop();
                             setState(() {});
                           },
@@ -37,7 +37,7 @@ displayImagePicker(BuildContext context, images) async {
                           });
                         },
                         child: Container(
-                          margin: EdgeInsets.all(3),
+                          margin: const EdgeInsets.all(3),
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
@@ -53,7 +53,7 @@ displayImagePicker(BuildContext context, images) async {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Done'),
+              child: const Text('Done'),
               onPressed: () {
                 setState(() {
                   Navigator.of(context).pop();

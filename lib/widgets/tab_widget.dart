@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../screens/tabs/tab_2/calender_screen.dart';
 import '../screens/tabs/tab_1_main/home_main_tab.dart';
+import '../services/images_service.dart';
 import 'side_bar.dart';
 import '../screens/auth/login_screen.dart';
 import '../services/firebase_user_auth.dart';
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               new SliverAppBar(
-                title: Text('Memoire'),
+                title: const Text('Memoire'),
                 pinned: true,
                 floating: true,
                 bottom: TabBar(
@@ -67,4 +69,10 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  // @override
+  // void deactivate() {
+  //   super.deactivate();
+  //   Provider.of<ImagesService>(context, listen: false).clear();
+  // }
 }

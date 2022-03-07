@@ -38,7 +38,7 @@ Future<Position> getLocationCoordinates() async {
 Future getForecast(Position position) async {
   late Weather currentWeather;
   Position position = await getLocationCoordinates();
-  print(position);
+  // print(position);
   String apiKey = "e82cd2c889d6e07ddd5bba117cc6052d";
   double lat = position.latitude;
   double lon = position.longitude;
@@ -47,7 +47,7 @@ Future getForecast(Position position) async {
   final response = await http.get(url);
 
   currentWeather = Weather.fromJson(jsonDecode(response.body));
-  print(response.body);
+  // print(response.body);
 
   return currentWeather;
 }

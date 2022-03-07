@@ -5,12 +5,10 @@ import 'package:path/path.dart' as Path;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class ImagesService extends ChangeNotifier {
-  List<File> images = [];
   final ImagePicker picker = ImagePicker();
   firebase_storage.Reference? ref;
-  List<String> tempImageList = [];
 
-  chooseImages() async {
+  chooseImages(images) async {
     final pickedImages = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedImages == null) {
@@ -19,11 +17,11 @@ class ImagesService extends ChangeNotifier {
       images.add(File(pickedImages.path));
       notifyListeners();
     }
-    if (pickedImages.path == null) retrieveLostData();
+    if (pickedImages.path == null) retrieveLostData(images);
   }
 
-  Future<void> retrieveLostData() async {
-    final LostData response = await picker.getLostData();
+  Future<void> retrieveLostData(images) async {
+    final LostDataResponse response = await picker.retrieveLostData();
     if (response.isEmpty) {
       return;
     }
@@ -35,7 +33,7 @@ class ImagesService extends ChangeNotifier {
     }
   }
 
-  Future uploadImages() async {
+  Future uploadImages(images, tempImageList) async {
     for (var img in images) {
       ref = firebase_storage.FirebaseStorage.instance
           .ref()
@@ -54,4 +52,9 @@ class ImagesService extends ChangeNotifier {
       );
     }
   }
+
+  // void clear() {
+  //   images.clear();
+  //   tempImageList().clear();
+  // }
 }
