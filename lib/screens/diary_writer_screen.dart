@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/src/widgets/text.dart' as Text;
+import '../services/entry_data_service.dart';
 import '../services/firestore_service.dart';
 import '../services/images_service.dart';
 import '../services/location_service.dart';

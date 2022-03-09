@@ -133,22 +133,11 @@ class EntryListItem extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          // Icon(
-                          //   Icons.location_on_outlined,
-                          //   size: 18,
-                          // ),
-                          // const SizedBox(
-                          //   width: 2,
-                          // ),
-                          // Text(entry.location.toString()),
-                          // const SizedBox(
-                          //   width: 10,
-                          // ),
                         ],
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        DateFormat('EEE, h:mm a').format(entry.timeStamp!),
+                        DateFormat('EEE, h:mm a').format(entry.date!),
                       ),
                       const SizedBox(height: 10),
                       Text(
