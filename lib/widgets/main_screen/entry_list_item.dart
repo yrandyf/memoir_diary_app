@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../../services/entry_data_service.dart';
 import '/screens/view_entry_screen.dart';
 import '/widgets/main_screen/delete_entry.dart';
 import '/models/Entry.dart';
@@ -52,6 +54,8 @@ class EntryListItem extends StatelessWidget {
         onTap: () {
           Navigator.of(context)
               .pushNamed(ViewEntryScreen.routeName, arguments: entry);
+          Provider.of<EntryBuilderService>(context, listen: false)
+              .setEntry(entry);
           print(entry.date);
         },
         child: Card(
@@ -144,8 +148,7 @@ class EntryListItem extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        DateFormat('EEE, h:mm a')
-                            .format(entry.timeStamp!.toDate()),
+                        DateFormat('EEE, h:mm a').format(entry.timeStamp!),
                       ),
                       const SizedBox(height: 10),
                       Text(

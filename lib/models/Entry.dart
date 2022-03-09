@@ -1,29 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Entry {
-  final String? entryId;
-  final List<dynamic>? content;
-  final String? contentSummery;
-  final DateTime? date;
-  final String? location;
-  final String? position;
-  final String? mood;
-  final List<dynamic>? image_list;
-  final Timestamp? timeStamp;
-  final String? userId;
+part 'Entry.freezed.dart';
+part 'Entry.g.dart';
 
-  Entry({
-    this.contentSummery,
-    this.userId,
-    this.image_list,
-    this.entryId,
-    this.content,
-    this.date,
-    this.location,
-    this.position,
-    this.mood,
-    this.timeStamp,
-  });
+@freezed
+class Entry with _$Entry {
+  const Entry._();
+
+  @JsonSerializable(explicitToJson: true)
+  factory Entry({
+    String? entryId,
+    List<dynamic>? content,
+    String? contentSummery,
+    DateTime? date,
+    String? location,
+    String? position,
+    String? mood,
+    List<dynamic>? image_list,
+    DateTime? timeStamp,
+    String? userId,
+  }) = _Entry;
+
+  factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);
 
   factory Entry.fromDocument(QueryDocumentSnapshot data) {
     return Entry(
@@ -36,7 +35,7 @@ class Entry {
       position: data.get('position'),
       mood: data.get('mood'),
       contentSummery: data.get('content_summery'),
-      timeStamp: data.get('time_stamp'),
+      timeStamp: data.get('time_stamp').toDate(),
     );
   }
 

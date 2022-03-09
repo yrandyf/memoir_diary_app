@@ -6,11 +6,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import '../models/Entry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/src/widgets/text.dart' as Text;
+import '../services/firestore_service.dart';
 import '../services/images_service.dart';
 import '../services/location_service.dart';
 import '../widgets/image_picker.dart';
@@ -61,6 +63,8 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   var place;
   List<File> _images = [];
   List<String> _tempImageList = [];
+  CollectionReference? entryRef =
+      FirebaseFirestore.instance.collection('entries');
 
   @override
   Widget build(BuildContext context) {
@@ -175,31 +179,28 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                     setState(() {
                       isLoading = true;
                     });
-                    CollectionReference? entryRef =
-                        FirebaseFirestore.instance.collection('entries');
+
                     await Provider.of<ImagesService>(context, listen: false)
                         .uploadImages(_images, _tempImageList)
                         .whenComplete(
                       () async {
-                        await entryRef
-                            .add(
-                          Entry(
-                                  userId:
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  date: selectedEntryDate,
-                                  content:
-                                      _controller.document.toDelta().toJson(),
-                                  contentSummery:
-                                      _controller.plainTextEditingValue.text,
-                                  timeStamp: Timestamp.now(),
-                                  location: place == null
-                                      ? 'null'
-                                      : '${place.locality}, ${place.country}',
-                                  mood: selectedMood,
-                                  image_list: _tempImageList,
-                                  position: selectedActivity)
-                              .toMap(),
-                        )
+                        await Provider.of<FirestoreService>(context,
+                                listen: false)
+                            .createEntry(Entry(
+                                entryId: entryRef!.doc().id,
+                                userId: FirebaseAuth.instance.currentUser!.uid,
+                                date: selectedEntryDate,
+                                content:
+                                    _controller.document.toDelta().toJson(),
+                                contentSummery:
+                                    _controller.plainTextEditingValue.text,
+                                timeStamp: DateTime.now(),
+                                location: place == null
+                                    ? 'null'
+                                    : '${place.locality}, ${place.country}',
+                                mood: selectedMood,
+                                image_list: _tempImageList,
+                                position: selectedActivity))
                             .whenComplete(
                           () {
                             Navigator.of(context).pop();

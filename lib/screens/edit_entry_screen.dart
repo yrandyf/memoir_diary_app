@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:intl/intl.dart';
 import 'package:memoir_diary_app/models/Entry.dart';
+import 'package:provider/provider.dart';
 
-class ViewEntryScreen extends StatefulWidget {
-  static const routeName = '/entryViewer';
+import '../services/entry_data_service.dart';
 
-  ViewEntryScreen({
+class EditEntryScreen extends StatefulWidget {
+  static const routeName = '/editor';
+  EditEntryScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  _ViewEntryScreenState createState() => _ViewEntryScreenState();
+  _EditEntryScreenState createState() => _EditEntryScreenState();
 }
 
 final _pageController = PageController(initialPage: 0);
@@ -34,13 +36,14 @@ List<Widget> pageIndicators(courselLength, currentIdx) {
   );
 }
 
-class _ViewEntryScreenState extends State<ViewEntryScreen> {
+class _EditEntryScreenState extends State<EditEntryScreen> {
   @override
   Widget build(BuildContext context) {
-    Entry? selectedEntry = ModalRoute.of(context)!.settings.arguments as Entry;
+    Entry? editSelectedEntry =
+        Provider.of<EntryBuilderService>(context, listen: false).entry!;
 
     late final quill.QuillController _controller = quill.QuillController(
-      document: quill.Document.fromJson(selectedEntry.content as List),
+      document: quill.Document.fromJson(editSelectedEntry.content as List),
       selection: const TextSelection.collapsed(offset: 0),
     );
 
@@ -52,10 +55,9 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
           SliverAppBar(
             actions: [
               IconButton(
-                  onPressed: () {
-                    print(selectedEntry.image_list![0]);
-                  },
-                  icon: const Icon(Icons.edit)),
+                icon: const Icon(Icons.edit),
+                onPressed: () {},
+              ),
               IconButton(
                   onPressed: () {}, icon: const Icon(Icons.more_vert_outlined))
             ],
@@ -64,17 +66,17 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
             ),
             backgroundColor: Colors.blue,
             pinned: true,
-            expandedHeight: selectedEntry.image_list!.isNotEmpty
+            expandedHeight: editSelectedEntry.image_list!.isNotEmpty
                 ? MediaQuery.of(context).size.width * 0.65
                 : MediaQuery.of(context).size.width * 0.10,
             flexibleSpace: FlexibleSpaceBar(
-              background: selectedEntry.image_list!.length == 1
+              background: editSelectedEntry.image_list!.length == 1
                   ? Visibility(
-                      visible: selectedEntry.image_list!.length == 1,
+                      visible: editSelectedEntry.image_list!.length == 1,
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: Image.network(
-                          selectedEntry.image_list?[0],
+                          editSelectedEntry.image_list?[0],
                           fit: BoxFit.cover,
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
@@ -90,21 +92,22 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                       ),
                     )
                   : Visibility(
-                      visible: selectedEntry.image_list!.length > 0,
+                      visible: editSelectedEntry.image_list!.length > 0,
                       child: PageView.builder(
                         controller: _pageController,
                         pageSnapping: true,
                         onPageChanged: (page) {
                           setState(() => currentPage = page);
                         },
-                        itemCount: selectedEntry.image_list!.length,
+                        itemCount: editSelectedEntry.image_list!.length,
                         itemBuilder: (context, index) {
                           return Stack(
                             children: [
                               SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 child: Image.network(
-                                  selectedEntry.image_list![index].toString(),
+                                  editSelectedEntry.image_list![index]
+                                      .toString(),
                                   fit: BoxFit.cover,
                                   loadingBuilder:
                                       (context, child, loadingProgress) {
@@ -126,7 +129,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: pageIndicators(
-                                        selectedEntry.image_list!.length,
+                                        editSelectedEntry.image_list!.length,
                                         currentPage),
                                   ),
                                 ),
@@ -156,7 +159,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                             margin: const EdgeInsets.only(right: 5),
                             child: Text(
                               DateFormat('dd')
-                                  .format(selectedEntry.date as DateTime),
+                                  .format(editSelectedEntry.date as DateTime),
                               style: const TextStyle(fontSize: 50),
                             ),
                           ),
@@ -167,12 +170,12 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                         children: [
                           Text(
                             (DateFormat('MMMM, yyyy')
-                                .format(selectedEntry.date as DateTime)),
+                                .format(editSelectedEntry.date as DateTime)),
                             style: const TextStyle(fontSize: 25),
                           ),
                           Text(
                             DateFormat('EEEE, HH:mm a')
-                                .format(selectedEntry.date as DateTime),
+                                .format(editSelectedEntry.date as DateTime),
                             style: const TextStyle(fontSize: 12),
                           ),
                         ],
@@ -193,7 +196,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                         ),
                         padding: EdgeInsets.all(0),
                         backgroundColor: Colors.white,
-                        label: Text(selectedEntry.location.toString()),
+                        label: Text(editSelectedEntry.location.toString()),
                       ),
                     ],
                   ),
@@ -213,7 +216,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                           ),
                           padding: EdgeInsets.all(0),
                           backgroundColor: Colors.white,
-                          label: Text(selectedEntry.position.toString()),
+                          label: Text(editSelectedEntry.position.toString()),
                         ),
                       ),
                       const SizedBox(
@@ -230,7 +233,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                           ),
                           padding: EdgeInsets.all(0),
                           backgroundColor: Colors.white,
-                          label: Text(selectedEntry.mood.toString()),
+                          label: Text(editSelectedEntry.mood.toString()),
                         ),
                       ),
                     ],

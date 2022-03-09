@@ -1,25 +1,28 @@
-import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import '../models/Entry.dart';
 
-class FirestoreService {
-  FirebaseFirestore _db = FirebaseFirestore.instance;
+class FirestoreService extends ChangeNotifier {
+  Future<List<Entry>> getEntries(String uid) async {
+    var entry = await FirebaseFirestore.instance
+        .collection('entries')
+        .where('uid', isEqualTo: uid)
+        .get();
+    return entry.docs.map((doc) {
+      return Entry.fromDocument(doc);
+    }).toList();
+  }
 
-  // Future saveDiaryEntry(DiaryEntry diaryEntry) {
-  //   return _db
-  //       .collection('diaryEntries')
-  //       .doc(diaryEntry.entryId.toString())
-  //       .set(diaryEntry.toMap() as Map<String, dynamic>);
-  // }
+  Future<void> createEntry(Entry entry) async {
+    var userEntries = FirebaseFirestore.instance.collection("entries");
+    userEntries.add(entry.toMap());
+    notifyListeners();
+  }
 
-  // Stream getDiaryEntries() {
-  //   return _db.collection('diaryEntries').snapshots().map((snapshot) => snapshot
-  //       .docs
-  //       .map((entry) => DiaryEntry.fromFirestore(entry.data()))
-  //       .toList());
-  // }
-
-  // Future removeentry(String entryId) {
-  //   return _db.collection('diaryEntries').doc(entryId).delete();
-  // }
+  Future<void> deleteEntry(entryId) async {
+    print(entryId);
+    var userEntries = FirebaseFirestore.instance.collection("entries");
+    userEntries.doc(entryId).delete();
+    notifyListeners();
+  }
 }

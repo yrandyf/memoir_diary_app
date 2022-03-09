@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../services/firestore_service.dart';
 import '/models/Entry.dart';
 
 class EntryDeleteAlertDialog extends StatelessWidget {
@@ -24,7 +26,8 @@ class EntryDeleteAlertDialog extends StatelessWidget {
         TextButton(
           child: Text('Delete'),
           onPressed: () {
-            entryRef.doc(entry.entryId).delete();
+            Provider.of<FirestoreService>(context, listen: false)
+                .deleteEntry(entry.entryId);
             Navigator.of(context, rootNavigator: true).pop();
           },
         ),

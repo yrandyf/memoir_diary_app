@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:intl/intl.dart';
 import 'package:memoir_diary_app/models/Entry.dart';
+import 'package:provider/provider.dart';
+
+import '../services/entry_data_service.dart';
+import 'edit_entry_screen.dart';
 
 class ViewEntryScreen extends StatefulWidget {
-  static const routeName = '/entryViewer';
+  static const routeName = '/viewer';
 
   ViewEntryScreen({
     Key? key,
@@ -38,7 +42,8 @@ List<Widget> pageIndicators(courselLength, currentIdx) {
 class _ViewEntryScreenState extends State<ViewEntryScreen> {
   @override
   Widget build(BuildContext context) {
-    Entry? selectedEntry = ModalRoute.of(context)!.settings.arguments as Entry;
+    Entry? selectedEntry =
+        Provider.of<EntryBuilderService>(context, listen: false).entry!;
 
     late final quill.QuillController _controller = quill.QuillController(
       document: quill.Document.fromJson(selectedEntry.content as List),
@@ -53,10 +58,10 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
           SliverAppBar(
             actions: [
               IconButton(
-                  onPressed: () {
-                    print(selectedEntry.image_list![0]);
-                  },
-                  icon: const Icon(Icons.edit)),
+                icon: const Icon(Icons.edit),
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(EditEntryScreen.routeName),
+              ),
               IconButton(
                   onPressed: () {}, icon: const Icon(Icons.more_vert_outlined))
             ],

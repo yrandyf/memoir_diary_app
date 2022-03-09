@@ -5,9 +5,12 @@ import 'package:provider/provider.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/activty_temp.dart';
 import 'screens/diary_writer_screen.dart';
+import 'screens/edit_entry_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/view_entry_screen.dart';
+import 'services/entry_data_service.dart';
+import 'services/firestore_service.dart';
 import 'services/images_service.dart';
 import 'services/location_service.dart';
 
@@ -22,6 +25,15 @@ void main() async {
     ),
     ChangeNotifierProvider<LocationService>(
       create: (context) => LocationService(),
+    ),
+    ChangeNotifierProvider<LocationService>(
+      create: (context) => LocationService(),
+    ),
+    ChangeNotifierProvider<FirestoreService>(
+      create: (context) => FirestoreService(),
+    ),
+    Provider<EntryBuilderService>(
+      create: (context) => EntryBuilderService(),
     ),
   ], child: MyApp()));
 }
@@ -44,6 +56,7 @@ class MyApp extends StatelessWidget {
         MainHomeScreen.routeName: (ctx) => MainHomeScreen(),
         ActivityRecognitionApp.routeName: (ctx) => ActivityRecognitionApp(),
         ViewEntryScreen.routeName: (ctx) => ViewEntryScreen(),
+        EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
       },
     );
   }
