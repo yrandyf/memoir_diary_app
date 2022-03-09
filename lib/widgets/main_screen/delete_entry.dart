@@ -26,8 +26,8 @@ class EntryDeleteAlertDialog extends StatelessWidget {
         TextButton(
           child: Text('Delete'),
           onPressed: () {
-            Provider.of<FirestoreService>(context, listen: false)
-                .deleteEntry(entry.entryId);
+            Provider.of<FirestoreService>(context, listen: false).deleteEntry(
+                entry.entryId.toString(), entry.image_list as List<dynamic>);
             Navigator.of(context, rootNavigator: true).pop();
           },
         ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../models/Entry.dart';
 
@@ -19,10 +20,22 @@ class FirestoreService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteEntry(entryId) async {
+  Future<void> deleteEntry(String entryId, List<dynamic> imageList) async {
     print(entryId);
     var userEntries = FirebaseFirestore.instance.collection("entries");
-    userEntries.doc(entryId).delete();
+    await userEntries
+        .doc(entryId)
+        .delete()
+        .then((_) => deleteImages(imageList));
+    notifyListeners();
+  }
+
+  Future deleteImages(List<dynamic> imageList) async {
+    for (var imgLink in imageList) {
+      await FirebaseStorage.instance.refFromURL(imgLink).delete().whenComplete(
+            () => print('Images are Deleted'),
+          );
+    }
     notifyListeners();
   }
 }
