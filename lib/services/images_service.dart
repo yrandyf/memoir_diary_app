@@ -53,6 +53,32 @@ class ImagesService extends ChangeNotifier {
     }
   }
 
+  chooseOneImage(image) async {
+    final pickedImages = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImages == null) {
+      return;
+    } else {
+      image = File(pickedImages.path);
+      print(image);
+      notifyListeners();
+    }
+    if (pickedImages.path == null) retrieveLostData(image);
+  }
+
+  Future<void> retrieveLostDataOneImage(image) async {
+    final LostDataResponse response = await picker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      image = File(response.file!.path);
+      notifyListeners();
+    } else {
+      print(response.file);
+    }
+  }
+
   // void clear() {
   //   images.clear();
   //   tempImageList().clear();

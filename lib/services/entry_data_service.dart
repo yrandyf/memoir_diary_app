@@ -29,7 +29,7 @@ class EntryBuilderService {
     _entry = _entry!.copyWith(position: position);
   }
 
-  void endLocation(String mood) {
+  void setMood(String mood) {
     _entry = _entry!.copyWith(mood: mood);
   }
 
