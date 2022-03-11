@@ -112,40 +112,12 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
                 ];
               },
             ),
-            // _images.isNotEmpty
-            //     ? Badge(
-            //         badgeColor: Colors.white70,
-            //         badgeContent: (Text('1')),
-            //         position: BadgePosition.topEnd(top: 0, end: 0),
-            //         child: IconButton(
-            //             icon: const Icon(Icons.add_a_photo),
-            //             onPressed: () async {}),
-            //       )
             IconButton(
                 icon: Icon(Icons.add_a_photo),
                 onPressed: () async {
-                  // if (_images.isEmpty) {
-                  // final pickedImages = await Provider.of<ImagesService>(
-                  //         context,
-                  //         listen: false)
-                  //     .picker
-                  //     .pickImage(source: ImageSource.gallery);
-                  // setState(
-                  //   () {
-                  //     if (pickedImages == null) {
-                  //       return;
-                  //     } else {
-                  //       _images.add(File(pickedImages!.path));
-                  //     }
-                  //   },
-                  // );
-                  // } else {
                   editPageImagePicker(context, _tempImageList);
-
                   setState(() {});
-                }
-                // },
-                ),
+                }),
             isLoading
                 ? const Padding(
                     padding: EdgeInsets.all(10),
