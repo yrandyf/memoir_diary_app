@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/src/widgets/text.dart' as Text;
+import '../models/Mood.dart';
 import '../services/entry_data_service.dart';
 import '../services/firestore_service.dart';
 import '../services/images_service.dart';
@@ -58,8 +59,23 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
     }
   }
 
-  var selectedMood = '';
-  var selectedActivity = '';
+  List<DropDownItems> moods = <DropDownItems>[
+    const DropDownItems('Happy', Icon(Icons.sentiment_very_satisfied_outlined)),
+    const DropDownItems('Sad', Icon(Icons.sentiment_dissatisfied_sharp)),
+    const DropDownItems('Average', Icon(Icons.sentiment_neutral_outlined)),
+    const DropDownItems(
+        'Dissatisfied', Icon(Icons.sentiment_very_dissatisfied_outlined))
+  ];
+  List<DropDownItems> activities = <DropDownItems>[
+    const DropDownItems('Standing', Icon(Icons.boy_outlined)),
+    const DropDownItems('Walking', Icon(Icons.directions_walk)),
+    const DropDownItems('Sitting', Icon(Icons.chair)),
+    const DropDownItems('Nap', Icon(Icons.hotel)),
+    const DropDownItems('Auto Detect', Icon(Icons.auto_fix_high))
+  ];
+
+  DropDownItems? selectedMood;
+  DropDownItems? selectedActivity;
   var place;
   List<File> _images = [];
   List<String> _tempImageList = [];
@@ -198,9 +214,9 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                                 location: place == null
                                     ? 'null'
                                     : '${place.locality}, ${place.country}',
-                                mood: selectedMood,
+                                mood: selectedMood?.name,
                                 image_list: _tempImageList,
-                                position: selectedActivity))
+                                position: selectedActivity?.name))
                             .whenComplete(
                           () {
                             Navigator.of(context).pop();
@@ -250,71 +266,104 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                       margin: const EdgeInsets.only(
                         top: 35,
                       ),
-                      child: PopupMenuButton(
-                        onSelected: (value) => setState(() {
-                          selectedActivity = value.toString();
-                          print(selectedActivity);
-                        }),
-                        icon: const Icon(Icons.accessibility_new),
-                        itemBuilder: (BuildContext bc) {
-                          return [
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.directions_walk),
-                                  Text.Text('Walking'),
-                                ],
-                              ),
-                              value: 'Walking',
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.chair),
-                                  Text.Text('Sitting'),
-                                ],
-                              ),
-                              value: 'Sitting',
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.boy_outlined),
-                                  Text.Text('Standing'),
-                                ],
-                              ),
-                              value: 'Standing',
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.hotel),
-                                  Text.Text('Nap'),
-                                ],
-                              ),
-                              value: 'Nap',
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.auto_fix_high),
-                                  Text.Text('Auto Detect'),
-                                ],
-                              ),
-                            ),
-                          ];
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<DropDownItems>(
+                            icon: Icon(Icons.arrow_drop_up),
+                            iconSize: 0,
+                            alignment: AlignmentDirectional.center,
+                            hint: selectedActivity == null
+                                ? Icon(Icons.accessibility_new)
+                                : selectedActivity?.icon,
+                            value: selectedActivity,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedActivity = value;
+                                print(selectedActivity?.name);
+                              });
+                            },
+                            items: activities.map((DropDownItems activity) {
+                              return DropdownMenuItem<DropDownItems>(
+                                value: activity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    activity.icon,
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                       ),
+                      // PopupMenuButton(
+                      //   onSelected: (value) => setState(() {
+                      //     selectedActivity = value.toString();
+                      //     print(selectedActivity);
+                      //   }),
+                      //   icon: const Icon(Icons.accessibility_new),
+                      //   itemBuilder: (BuildContext bc) {
+                      //     return [
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.directions_walk),
+                      //             Text.Text('Walking'),
+                      //           ],
+                      //         ),
+                      //         value: 'Walking',
+                      //       ),
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.chair),
+                      //             Text.Text('Sitting'),
+                      //           ],
+                      //         ),
+                      //         value: 'Sitting',
+                      //       ),
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.boy_outlined),
+                      //             Text.Text('Standing'),
+                      //           ],
+                      //         ),
+                      //         value: 'Standing',
+                      //       ),
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.hotel),
+                      //             Text.Text('Nap'),
+                      //           ],
+                      //         ),
+                      //         value: 'Nap',
+                      //       ),
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.auto_fix_high),
+                      //             Text.Text('Auto Detect'),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ];
+                      //   },
+                      // ),
                     ),
                   ),
                   Flexible(
@@ -324,52 +373,85 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                       margin: const EdgeInsets.only(
                         top: 35,
                       ),
-                      child: PopupMenuButton(
-                        onSelected: (value) => setState(
-                          () {
-                            selectedMood = value.toString();
-                            print(selectedMood);
-                          },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<DropDownItems>(
+                            icon: Icon(Icons.arrow_drop_up),
+                            iconSize: 0,
+                            alignment: AlignmentDirectional.center,
+                            hint: selectedMood == null
+                                ? Icon(Icons.sentiment_very_satisfied_outlined)
+                                : selectedMood?.icon,
+                            value: selectedMood,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedMood = value;
+                                print(selectedMood?.name);
+                              });
+                            },
+                            items: moods.map((DropDownItems mood) {
+                              return DropdownMenuItem<DropDownItems>(
+                                value: mood,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    mood.icon,
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                        icon: const Icon(Icons.mood),
-                        itemBuilder: (BuildContext bc) {
-                          return [
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.sentiment_very_satisfied_outlined),
-                                  Text.Text('Happy'),
-                                ],
-                              ),
-                              value: 'Happy',
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.sentiment_dissatisfied_sharp),
-                                  Text.Text('     Sad'),
-                                ],
-                              ),
-                              value: 'Sad',
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(Icons.sentiment_neutral_outlined),
-                                  Text.Text('Average'),
-                                ],
-                              ),
-                              value: 'Average',
-                            )
-                          ];
-                        },
                       ),
+                      // PopupMenuButton(
+                      //   onSelected: (value) => setState(
+                      //     () {
+                      //       selectedMood = value.toString();
+                      //       print(selectedMood);
+                      //     },
+                      //   ),
+                      //   icon: const Icon(Icons.mood),
+                      //   itemBuilder: (BuildContext bc) {
+                      //     return [
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.sentiment_very_satisfied_outlined),
+                      //             Text.Text('Happy'),
+                      //           ],
+                      //         ),
+                      //         value: 'Happy',
+                      //       ),
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.sentiment_dissatisfied_sharp),
+                      //             Text.Text('     Sad'),
+                      //           ],
+                      //         ),
+                      //         value: 'Sad',
+                      //       ),
+                      //       PopupMenuItem(
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Icon(Icons.sentiment_neutral_outlined),
+                      //             Text.Text('Average'),
+                      //           ],
+                      //         ),
+                      //         value: 'Average',
+                      //       )
+                      //     ];
+                      //   },
+                      // ),
                     ),
                   ),
                   Expanded(

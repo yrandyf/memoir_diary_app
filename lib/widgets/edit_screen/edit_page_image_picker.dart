@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -78,13 +79,22 @@ editPageImagePicker(BuildContext context, _tempImageList) async {
                             },
                           );
                         },
-                        child: Container(
-                          margin: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              scale: 0.5,
-                              fit: BoxFit.cover,
-                              image: NetworkImage(_tempImageList[index - 1]),
+                        child: Badge(
+                          badgeColor: Colors.red,
+                          badgeContent: const Icon(
+                            Icons.remove,
+                            color: Colors.white,
+                            size: 10,
+                          ),
+                          position: BadgePosition.topStart(top: 0, start: 0),
+                          child: Container(
+                            margin: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                scale: 0.5,
+                                fit: BoxFit.cover,
+                                image: NetworkImage(_tempImageList[index - 1]),
+                              ),
                             ),
                           ),
                         ),
