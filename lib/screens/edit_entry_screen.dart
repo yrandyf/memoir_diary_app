@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:memoir_diary_app/models/Mood.dart';
+import 'package:memoir_diary_app/models/DropDownItem.dart';
+import 'package:memoir_diary_app/screens/tabs/tab_1_main/home_main_tab.dart';
+import 'package:memoir_diary_app/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../models/Entry.dart';
 import '../services/entry_data_service.dart';
 import '../services/location_service.dart';
+import '../utils/icon_switch.dart';
 import '../widgets/edit_screen/edit_page_image_picker.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import '../widgets/tab_widget.dart';
+import 'view_entry_screen.dart';
 
 class EditEntryScreen extends StatefulWidget {
   static const routeName = '/editor';
@@ -20,29 +25,36 @@ class EditEntryScreen extends StatefulWidget {
 }
 
 List<DropDownItems> moods = <DropDownItems>[
-  const DropDownItems('Happy', Icon(Icons.sentiment_very_satisfied_outlined)),
-  const DropDownItems('Sad', Icon(Icons.sentiment_dissatisfied_sharp)),
-  const DropDownItems('Average', Icon(Icons.sentiment_neutral_outlined)),
-  const DropDownItems(
+  DropDownItems('Happy', Icon(Icons.sentiment_very_satisfied_outlined)),
+  DropDownItems('Sad', Icon(Icons.sentiment_dissatisfied_sharp)),
+  DropDownItems('Average', Icon(Icons.sentiment_neutral_outlined)),
+  DropDownItems(
       'Dissatisfied', Icon(Icons.sentiment_very_dissatisfied_outlined))
 ];
 List<DropDownItems> activities = <DropDownItems>[
-  const DropDownItems('Standing', Icon(Icons.boy_outlined)),
-  const DropDownItems('Walking', Icon(Icons.directions_walk)),
-  const DropDownItems('Sitting', Icon(Icons.chair)),
-  const DropDownItems('Nap', Icon(Icons.hotel)),
-  const DropDownItems('Auto Detect', Icon(Icons.auto_fix_high))
+  DropDownItems('Standing', Icon(Icons.boy_outlined)),
+  DropDownItems('Walking', Icon(Icons.directions_walk)),
+  DropDownItems('Sitting', Icon(Icons.chair)),
+  DropDownItems('Nap', Icon(Icons.hotel)),
+  DropDownItems('Auto Detect', Icon(Icons.auto_fix_high))
 ];
 
 var selectedUser;
+List<dynamic>? selectedEntry;
 bool isLoading = false;
 var place;
-DropDownItems? selectedMood;
-DropDownItems? selectedActivity;
 List<dynamic>? _tempImageList = [];
-String dropdownValue = 'One';
+
+// String dropdownValue = 'One';
 
 class _EditEntryScreenState extends State<EditEntryScreen> {
+  DropDownItems? selectedActivity;
+  DropDownItems? selectedMood;
+
+  late final quill.QuillController _controller = quill.QuillController(
+    document: quill.Document.fromJson(selectedEntry as List<dynamic>),
+    selection: const TextSelection.collapsed(offset: 0),
+  );
   _selectDate(BuildContext context) async {
     final DateTime? selectedDate = await showDatePicker(
       context: context,
@@ -65,15 +77,21 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
     }
   }
 
+  // @override
+  // void deactivate() {
+  //   super.deactivate();
+  //   Provider.of<EntryBuilderService>(context, listen: false).clear();
+  // }
+
   @override
   Widget build(BuildContext context) {
-    late final quill.QuillController _controller = quill.QuillController(
-      document: quill.Document.fromJson(
-          Provider.of<EntryBuilderService>(context, listen: false)
-              .entry!
-              .content as List),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
+    String? activity = Provider.of<EntryBuilderService>(context, listen: false)
+        .entry!
+        .position;
+    String? mood =
+        Provider.of<EntryBuilderService>(context, listen: false).entry!.mood;
+    selectedEntry =
+        Provider.of<EntryBuilderService>(context, listen: false).entry?.content;
     _tempImageList = Provider.of<EntryBuilderService>(context, listen: false)
         .entry!
         .image_list;
@@ -96,14 +114,13 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              print(selectedDiaryEntry.entryId);
+            },
             icon: Icon(Icons.tag),
           ),
           PopupMenuButton(
-            onSelected: (value) => setState(() {
-              // selectedMood = value.toString();
-              // print(selectedMood);
-            }),
+            onSelected: (value) => setState(() {}),
             icon: Icon(selectedDiaryEntry.location == null
                 ? Icons.add_location_outlined
                 : Icons.location_on_outlined),
@@ -156,7 +173,35 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
               : IconButton(
                   icon: const Icon(Icons.library_add_check),
                   onPressed: () async {
-                    setState(() {});
+                    setState(() {
+                      isLoading = true;
+                      // Setting content with formatting.
+                      (Provider.of<EntryBuilderService>(context, listen: false)
+                          .setContent(_controller.document.toDelta().toJson()));
+                      // Setting content without formatitng.
+                      (Provider.of<EntryBuilderService>(context, listen: false)
+                          .setSummery(_controller.plainTextEditingValue.text));
+                      // Time Stamp setup
+                      (Provider.of<EntryBuilderService>(context, listen: false)
+                          .setTimeStamp(DateTime.now()));
+                      Provider.of<FirestoreService>(context, listen: false)
+                          .updateEntry(
+                              Provider.of<EntryBuilderService>(context,
+                                      listen: false)
+                                  .entry!
+                                  .entryId,
+                              (Provider.of<EntryBuilderService>(context,
+                                      listen: false)
+                                  .entry as Entry))
+                          .whenComplete(
+                        () {
+                          print('Entry Updated');
+                          isLoading = false;
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                        },
+                      );
+                    });
                   },
                 ),
         ],
@@ -179,7 +224,7 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
                     scrollController: ScrollController(),
                     scrollable: true,
                     focusNode: FocusNode(),
-                    autoFocus: true,
+                    autoFocus: false,
                     expands: false,
                     maxHeight: null,
                     minHeight: null,
@@ -208,14 +253,17 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
                           icon: Icon(Icons.arrow_drop_up),
                           iconSize: 0,
                           alignment: AlignmentDirectional.center,
-                          hint: selectedMood == null
-                              ? Icon(Icons.sentiment_very_satisfied_outlined)
-                              : selectedMood?.icon,
+                          hint: mood == null
+                              ? Icon(Icons.sentiment_satisfied_alt)
+                              : setMoodIcon(mood),
                           value: selectedMood,
                           onChanged: (value) {
                             setState(() {
-                              selectedMood = value;
-                              print(selectedMood?.name);
+                              // selectedMood = value;
+                              Provider.of<EntryBuilderService>(context,
+                                      listen: false)
+                                  .setMood(value?.name as String);
+                              print(value?.name);
                             });
                           },
                           items: moods.map((DropDownItems mood) {
@@ -252,14 +300,18 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
                             icon: Icon(Icons.arrow_drop_up),
                             iconSize: 0,
                             alignment: AlignmentDirectional.center,
-                            hint: selectedActivity == null
+                            hint: activity == null
                                 ? Icon(Icons.accessibility_new)
-                                : selectedActivity?.icon,
+                                : setActivityIcon(activity),
                             value: selectedActivity,
                             onChanged: (value) {
                               setState(() {
-                                selectedActivity = value;
-                                print(selectedActivity?.name);
+                                print('provider activity data = ${activity}');
+                                // selectedActivity = value;
+                                Provider.of<EntryBuilderService>(context,
+                                        listen: false)
+                                    .setPosition(value?.name as String);
+                                print(value?.name);
                               });
                             },
                             items: activities.map((DropDownItems activity) {

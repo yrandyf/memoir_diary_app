@@ -20,8 +20,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isSendingVerification = false;
-  bool _isSigningOut = false;
+  // bool _isSendingVerification = false;
+  // bool _isSigningOut = false;
 
   late User _currentUser;
 

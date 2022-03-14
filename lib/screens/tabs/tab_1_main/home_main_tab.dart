@@ -32,20 +32,23 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       ),
       body: Consumer<FirestoreService>(
         builder: (_, fireStoreService, __) {
-          return FutureBuilder<List<Entry>>(
-            future: fireStoreService.getEntries(uid),
-            builder: (_, AsyncSnapshot<List<Entry>> entries) {
-              if (!entries.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(color: Colors.blue),
+          return StreamBuilder<QuerySnapshot>(
+            stream: entryRef.snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> entries) {
+              if (entries.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               }
 
-              // var userEntryList = entries.data!.docs.map((entry) {
-              //   return Entry.fromDocument(entry);
-              // }).where((entry) {
-              //   return entry.userId == FirebaseAuth.instance.currentUser!.uid;
-              // }).toList();
+              var userEntryList = entries.data!.docs
+                  .map((entry) {
+                    return Entry.fromDocument(entry);
+                  })
+                  .where((entry) =>
+                      entry.userId == FirebaseAuth.instance.currentUser!.uid)
+                  .toList();
 
               return CustomScrollView(
                 shrinkWrap: true,
@@ -66,13 +69,13 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                      Entry entry = entries.data![index];
+                      Entry entry = userEntryList[index];
 
                       return EntryListItem(
                         entry: entry,
                         entryRef: entryRef,
                       );
-                    }, childCount: entries.data?.length),
+                    }, childCount: userEntryList.length),
                   ),
                 ],
               );

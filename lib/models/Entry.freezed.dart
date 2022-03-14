@@ -32,7 +32,8 @@ class _$EntryTearOff {
       String? mood,
       List<dynamic>? image_list,
       DateTime? timeStamp,
-      String? userId}) {
+      String? userId,
+      List<dynamic>? tags}) {
     return _Entry(
       entryId: entryId,
       content: content,
@@ -44,6 +45,7 @@ class _$EntryTearOff {
       image_list: image_list,
       timeStamp: timeStamp,
       userId: userId,
+      tags: tags,
     );
   }
 
@@ -67,6 +69,7 @@ mixin _$Entry {
   List<dynamic>? get image_list => throw _privateConstructorUsedError;
   DateTime? get timeStamp => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
+  List<dynamic>? get tags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -87,7 +90,8 @@ abstract class $EntryCopyWith<$Res> {
       String? mood,
       List<dynamic>? image_list,
       DateTime? timeStamp,
-      String? userId});
+      String? userId,
+      List<dynamic>? tags});
 }
 
 /// @nodoc
@@ -110,6 +114,7 @@ class _$EntryCopyWithImpl<$Res> implements $EntryCopyWith<$Res> {
     Object? image_list = freezed,
     Object? timeStamp = freezed,
     Object? userId = freezed,
+    Object? tags = freezed,
   }) {
     return _then(_value.copyWith(
       entryId: entryId == freezed
@@ -152,6 +157,10 @@ class _$EntryCopyWithImpl<$Res> implements $EntryCopyWith<$Res> {
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
+      tags: tags == freezed
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
     ));
   }
 }
@@ -171,7 +180,8 @@ abstract class _$EntryCopyWith<$Res> implements $EntryCopyWith<$Res> {
       String? mood,
       List<dynamic>? image_list,
       DateTime? timeStamp,
-      String? userId});
+      String? userId,
+      List<dynamic>? tags});
 }
 
 /// @nodoc
@@ -195,6 +205,7 @@ class __$EntryCopyWithImpl<$Res> extends _$EntryCopyWithImpl<$Res>
     Object? image_list = freezed,
     Object? timeStamp = freezed,
     Object? userId = freezed,
+    Object? tags = freezed,
   }) {
     return _then(_Entry(
       entryId: entryId == freezed
@@ -237,6 +248,10 @@ class __$EntryCopyWithImpl<$Res> extends _$EntryCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
+      tags: tags == freezed
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
     ));
   }
 }
@@ -255,7 +270,8 @@ class _$_Entry extends _Entry {
       this.mood,
       this.image_list,
       this.timeStamp,
-      this.userId})
+      this.userId,
+      this.tags})
       : super._();
 
   factory _$_Entry.fromJson(Map<String, dynamic> json) =>
@@ -281,10 +297,12 @@ class _$_Entry extends _Entry {
   final DateTime? timeStamp;
   @override
   final String? userId;
+  @override
+  final List<dynamic>? tags;
 
   @override
   String toString() {
-    return 'Entry(entryId: $entryId, content: $content, contentSummery: $contentSummery, date: $date, location: $location, position: $position, mood: $mood, image_list: $image_list, timeStamp: $timeStamp, userId: $userId)';
+    return 'Entry(entryId: $entryId, content: $content, contentSummery: $contentSummery, date: $date, location: $location, position: $position, mood: $mood, image_list: $image_list, timeStamp: $timeStamp, userId: $userId, tags: $tags)';
   }
 
   @override
@@ -303,7 +321,8 @@ class _$_Entry extends _Entry {
             const DeepCollectionEquality()
                 .equals(other.image_list, image_list) &&
             const DeepCollectionEquality().equals(other.timeStamp, timeStamp) &&
-            const DeepCollectionEquality().equals(other.userId, userId));
+            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.tags, tags));
   }
 
   @override
@@ -318,7 +337,8 @@ class _$_Entry extends _Entry {
       const DeepCollectionEquality().hash(mood),
       const DeepCollectionEquality().hash(image_list),
       const DeepCollectionEquality().hash(timeStamp),
-      const DeepCollectionEquality().hash(userId));
+      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(tags));
 
   @JsonKey(ignore: true)
   @override
@@ -342,7 +362,8 @@ abstract class _Entry extends Entry {
       String? mood,
       List<dynamic>? image_list,
       DateTime? timeStamp,
-      String? userId}) = _$_Entry;
+      String? userId,
+      List<dynamic>? tags}) = _$_Entry;
   _Entry._() : super._();
 
   factory _Entry.fromJson(Map<String, dynamic> json) = _$_Entry.fromJson;
@@ -367,6 +388,8 @@ abstract class _Entry extends Entry {
   DateTime? get timeStamp;
   @override
   String? get userId;
+  @override
+  List<dynamic>? get tags;
   @override
   @JsonKey(ignore: true)
   _$EntryCopyWith<_Entry> get copyWith => throw _privateConstructorUsedError;

@@ -20,6 +20,7 @@ _$_Entry _$$_EntryFromJson(Map<String, dynamic> json) => _$_Entry(
           ? null
           : DateTime.parse(json['timeStamp'] as String),
       userId: json['userId'] as String?,
+      tags: json['tags'] as List<dynamic>?,
     );
 
 Map<String, dynamic> _$$_EntryToJson(_$_Entry instance) => <String, dynamic>{
@@ -33,4 +34,5 @@ Map<String, dynamic> _$$_EntryToJson(_$_Entry instance) => <String, dynamic>{
       'image_list': instance.image_list,
       'timeStamp': instance.timeStamp?.toIso8601String(),
       'userId': instance.userId,
+      'tags': instance.tags,
     };

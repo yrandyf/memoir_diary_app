@@ -17,6 +17,10 @@ class EntryBuilderService {
     _entry = _entry!.copyWith(contentSummery: contentSummery);
   }
 
+  void setContent(List<dynamic> content) {
+    _entry = _entry!.copyWith(content: content);
+  }
+
   void setDate(DateTime date) {
     _entry = _entry!.copyWith(date: date);
   }
@@ -37,11 +41,15 @@ class EntryBuilderService {
     _entry = _entry!.copyWith(image_list: image_list);
   }
 
-  void setTransportMode(DateTime timeStamp) {
+  void setTimeStamp(DateTime timeStamp) {
     _entry = _entry!.copyWith(timeStamp: timeStamp);
   }
 
   void setEntry(Entry entry) {
     _entry = entry;
+  }
+
+  void clear() {
+    _entry = null;
   }
 }

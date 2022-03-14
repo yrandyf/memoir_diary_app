@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
+import 'package:provider/provider.dart';
+import '../../services/entry_data_service.dart';
 import 'delete_image.dart';
 
 editPageImagePicker(BuildContext context, _tempImageList) async {
@@ -54,6 +56,10 @@ editPageImagePicker(BuildContext context, _tempImageList) async {
                                         (imageLink) {
                                           _tempImageList.add(imageLink);
                                           print(_tempImageList);
+                                          Provider.of<EntryBuilderService>(
+                                                  context,
+                                                  listen: false)
+                                              .setImageList(_tempImageList);
                                           setState(() => isLoading = false);
                                         },
                                       );
@@ -76,6 +82,9 @@ editPageImagePicker(BuildContext context, _tempImageList) async {
                                 },
                               );
                               _tempImageList!.removeAt(index - 1);
+                              Provider.of<EntryBuilderService>(context,
+                                      listen: false)
+                                  .setImageList(_tempImageList);
                             },
                           );
                         },

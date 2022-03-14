@@ -8,7 +8,7 @@ import '/screens/view_entry_screen.dart';
 import '/widgets/main_screen/delete_entry.dart';
 import '/models/Entry.dart';
 
-class EntryListItem extends StatelessWidget {
+class EntryListItem extends StatefulWidget {
   CollectionReference entryRef;
 
   EntryListItem({
@@ -19,6 +19,11 @@ class EntryListItem extends StatelessWidget {
 
   final Entry entry;
 
+  @override
+  State<EntryListItem> createState() => _EntryListItemState();
+}
+
+class _EntryListItemState extends State<EntryListItem> {
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -32,7 +37,7 @@ class EntryListItem extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return EntryDeleteAlertDialog(
-                      entryRef: entryRef, entry: entry);
+                      entryRef: widget.entryRef, entry: widget.entry);
                 },
               )
             },
@@ -53,10 +58,10 @@ class EntryListItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.of(context)
-              .pushNamed(ViewEntryScreen.routeName, arguments: entry);
+              .pushNamed(ViewEntryScreen.routeName, arguments: widget.entry);
           Provider.of<EntryBuilderService>(context, listen: false)
-              .setEntry(entry);
-          print(entry.date);
+              .setEntry(widget.entry);
+          print(widget.entry.date);
         },
         child: Card(
           elevation: 5,
@@ -72,8 +77,8 @@ class EntryListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Visibility(
-                        visible: (entry.image_list!.isNotEmpty),
-                        child: entry.image_list!.isNotEmpty
+                        visible: (widget.entry.image_list!.isNotEmpty),
+                        child: widget.entry.image_list!.isNotEmpty
                             ? Row(
                                 children: [
                                   Flexible(
@@ -88,7 +93,7 @@ class EntryListItem extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
                                           image: NetworkImage(
-                                              entry.image_list![0]),
+                                              widget.entry.image_list![0]),
                                           fit: BoxFit.cover,
                                         ),
                                         borderRadius: const BorderRadius.only(
@@ -106,7 +111,7 @@ class EntryListItem extends StatelessWidget {
                         children: [
                           Text(
                             DateFormat('MMMM d, yyyy')
-                                .format(entry.date as DateTime),
+                                .format(widget.entry.date as DateTime),
                           ),
                           const SizedBox(
                             width: 10,
@@ -118,7 +123,7 @@ class EntryListItem extends StatelessWidget {
                           const SizedBox(
                             width: 2,
                           ),
-                          Text(entry.position.toString()),
+                          Text(widget.entry.position.toString()),
                           const SizedBox(
                             width: 10,
                           ),
@@ -129,7 +134,7 @@ class EntryListItem extends StatelessWidget {
                           const SizedBox(
                             width: 2,
                           ),
-                          Text(entry.mood.toString()),
+                          Text(widget.entry.mood.toString()),
                           const SizedBox(
                             width: 10,
                           ),
@@ -137,11 +142,11 @@ class EntryListItem extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        DateFormat('EEE, h:mm a').format(entry.date!),
+                        DateFormat('EEE, h:mm a').format(widget.entry.date!),
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        '${entry.contentSummery}',
+                        '${widget.entry.contentSummery}',
                         overflow: TextOverflow.fade,
                         maxLines: 4,
                         softWrap: true,

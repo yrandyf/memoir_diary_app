@@ -59,8 +59,11 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(EditEntryScreen.routeName),
+                onPressed: () {
+                  // Provider.of<EntryBuilderService>(context, listen: false)
+                  //     .setEntry(selectedEntry);
+                  Navigator.of(context).pushNamed(EditEntryScreen.routeName);
+                },
               ),
               IconButton(
                   onPressed: () {}, icon: const Icon(Icons.more_vert_outlined))

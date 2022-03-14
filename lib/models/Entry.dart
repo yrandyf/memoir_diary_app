@@ -20,6 +20,7 @@ class Entry with _$Entry {
     List<dynamic>? image_list,
     DateTime? timeStamp,
     String? userId,
+    List<dynamic>? tags,
   }) = _Entry;
 
   factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);
@@ -36,6 +37,7 @@ class Entry with _$Entry {
       mood: data.get('mood'),
       contentSummery: data.get('content_summery'),
       timeStamp: data.get('time_stamp').toDate(),
+      tags: data.get('tags'),
     );
   }
 
@@ -49,7 +51,8 @@ class Entry with _$Entry {
       'position': position,
       'mood': mood,
       'time_stamp': timeStamp,
-      'content_summery': contentSummery
+      'content_summery': contentSummery,
+      'tags': tags,
     };
   }
 }

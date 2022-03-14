@@ -11,12 +11,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/src/widgets/text.dart' as Text;
-import '../models/Mood.dart';
+import '../models/DropDownItem.dart';
 import '../services/entry_data_service.dart';
 import '../services/firestore_service.dart';
 import '../services/images_service.dart';
 import '../services/location_service.dart';
 import '../widgets/image_picker.dart';
+import '../widgets/tag_sheet.dart';
 import 'activty_temp.dart';
 import 'tabs/tab_1_main/home_main_tab.dart';
 import 'package:path/path.dart' as Path;
@@ -60,18 +61,18 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   }
 
   List<DropDownItems> moods = <DropDownItems>[
-    const DropDownItems('Happy', Icon(Icons.sentiment_very_satisfied_outlined)),
-    const DropDownItems('Sad', Icon(Icons.sentiment_dissatisfied_sharp)),
-    const DropDownItems('Average', Icon(Icons.sentiment_neutral_outlined)),
-    const DropDownItems(
+    DropDownItems('Happy', Icon(Icons.sentiment_very_satisfied_outlined)),
+    DropDownItems('Sad', Icon(Icons.sentiment_dissatisfied_sharp)),
+    DropDownItems('Average', Icon(Icons.sentiment_neutral_outlined)),
+    DropDownItems(
         'Dissatisfied', Icon(Icons.sentiment_very_dissatisfied_outlined))
   ];
   List<DropDownItems> activities = <DropDownItems>[
-    const DropDownItems('Standing', Icon(Icons.boy_outlined)),
-    const DropDownItems('Walking', Icon(Icons.directions_walk)),
-    const DropDownItems('Sitting', Icon(Icons.chair)),
-    const DropDownItems('Nap', Icon(Icons.hotel)),
-    const DropDownItems('Auto Detect', Icon(Icons.auto_fix_high))
+    DropDownItems('Standing', Icon(Icons.boy_outlined)),
+    DropDownItems('Walking', Icon(Icons.directions_walk)),
+    DropDownItems('Sitting', Icon(Icons.chair)),
+    DropDownItems('Nap', Icon(Icons.hotel)),
+    DropDownItems('Auto Detect', Icon(Icons.auto_fix_high))
   ];
 
   DropDownItems? selectedMood;
@@ -81,6 +82,8 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   List<String> _tempImageList = [];
   CollectionReference? entryRef =
       FirebaseFirestore.instance.collection('entries');
+
+final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +100,10 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
             icon: Icon(Icons.tag),
+            onPressed: () {
+              tagModalSheet(context,_formKey);
+            },
           ),
           PopupMenuButton(
             onSelected: (value) => setState(() {
