@@ -45,6 +45,10 @@ class EntryBuilderService {
     _entry = _entry!.copyWith(timeStamp: timeStamp);
   }
 
+  void setTag(tags) {
+    _entry = _entry!.copyWith(tags: tags);
+  }
+
   void setEntry(Entry entry) {
     _entry = entry;
   }

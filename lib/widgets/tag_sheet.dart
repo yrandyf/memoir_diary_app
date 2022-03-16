@@ -42,8 +42,20 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                                 focusNode: FocusNode(),
                                 decoration: InputDecoration(
                                   suffixIcon: IconButton(
-                                    icon: Icon(Icons.add_box_outlined),
-                                    onPressed: () {},
+                                    icon: const Icon(Icons.add_box_outlined),
+                                    onPressed: () {
+                                      setState(() {
+                                        Provider.of<FirestoreService>(context,
+                                                listen: false)
+                                            .createTag(
+                                          Tag(
+                                              tag: tagTextController.text,
+                                              userId: FirebaseAuth
+                                                  .instance.currentUser!.uid),
+                                        );
+                                      });
+                                      print('tage added');
+                                    },
                                   ),
                                   labelText: 'Enter Tag',
                                   border: OutlineInputBorder(
@@ -78,7 +90,7 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Please select a city';
+                                  return 'Please Enter a tag name';
                                 }
                               },
                               onSaved: (value) => _selectedCity = value!,
@@ -102,7 +114,7 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                       ),
                     ),
                     // Divider(),
-                    tags != null
+                    tags == null
                         ? Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: Text('Assigned Tags',
@@ -120,9 +132,14 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                                       borderRadius: BorderRadius.circular(5.0)),
                                   title: Text(tags[index].toString()),
                                   trailing: IconButton(
-                                      icon: Icon(Icons.remove_circle,
+                                      icon: const Icon(Icons.remove_circle,
                                           color: Colors.redAccent),
-                                      onPressed: () {}))
+                                      onPressed: () {
+                                        setState(() {
+                                          tags.removeAt(index);
+                                          print(tags);
+                                        });
+                                      }))
                               : Center(
                                   child: Text('No Added Tags!'),
                                 );
