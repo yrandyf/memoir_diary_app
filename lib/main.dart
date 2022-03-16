@@ -13,6 +13,7 @@ import 'services/entry_data_service.dart';
 import 'services/firestore_service.dart';
 import 'services/images_service.dart';
 import 'services/location_service.dart';
+import 'services/tag_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,9 @@ void main() async {
     ),
     ChangeNotifierProvider<FirestoreService>(
       create: (context) => FirestoreService(),
+    ),
+    ChangeNotifierProvider<TagService>(
+      create: (context) => TagService(),
     ),
     Provider<EntryBuilderService>(
       create: (context) => EntryBuilderService(),

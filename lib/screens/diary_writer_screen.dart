@@ -12,10 +12,12 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/src/widgets/text.dart' as Text;
 import '../models/DropDownItem.dart';
+import '../models/Tag.dart';
 import '../services/entry_data_service.dart';
 import '../services/firestore_service.dart';
 import '../services/images_service.dart';
 import '../services/location_service.dart';
+import '../services/tag_Service.dart';
 import '../widgets/image_picker.dart';
 import '../widgets/tag_sheet.dart';
 import 'activty_temp.dart';
@@ -37,6 +39,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
     selection: const TextSelection.collapsed(offset: 0),
   );
 
+  var tagTextController = TextEditingController();
   DateTime selectedEntryDate = DateTime.now();
   bool isLoading = false;
 
@@ -83,7 +86,30 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   CollectionReference? entryRef =
       FirebaseFirestore.instance.collection('entries');
 
-final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
+  List? tags = [];
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List tagSearchSugestions = [];
+
+  Future getDocs() async {
+    tagSearchSugestions = (await Provider.of<FirestoreService>(context,
+                listen: false)
+            .getSearch())
+        .map((tags) {
+          return Tag.fromDocument(tags);
+        })
+        .where(
+            (entry) => entry.userId == FirebaseAuth.instance.currentUser!.uid)
+        .toList();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getDocs();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +128,14 @@ final _formKey = GlobalKey<FormState>();
           IconButton(
             icon: Icon(Icons.tag),
             onPressed: () {
-              tagModalSheet(context,_formKey);
+              tagModalSheet(
+                context,
+                _formKey,
+                tagTextController,
+                entryRef,
+                tags,
+                tagSearchSugestions,
+              );
             },
           ),
           PopupMenuButton(
@@ -252,7 +285,7 @@ final _formKey = GlobalKey<FormState>();
                     scrollController: ScrollController(),
                     scrollable: true,
                     focusNode: FocusNode(),
-                    autoFocus: true,
+                    autoFocus: false,
                     expands: false,
                     maxHeight: null,
                     minHeight: null,

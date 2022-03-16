@@ -56,7 +56,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 slivers: <Widget>[
                   SliverAppBar(
                     automaticallyImplyLeading: false,
-                    iconTheme: IconThemeData(
+                    iconTheme: const IconThemeData(
                       color: Colors.black,
                     ),
                     backgroundColor: Colors.white,

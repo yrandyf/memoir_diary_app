@@ -2,22 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../models/Entry.dart';
+import '../models/Tag.dart';
 
 class FirestoreService extends ChangeNotifier {
-  // Stream<QuerySnapshot> streamEntries(String uid) {
-  //   var userEntries = FirebaseFirestore.instance
-  //       .collection("entries")
-  //       .orderBy("entry_date", descending: true)
-  //       .where('uid', isEqualTo: uid)
-  //       .snapshots();
-
-  //   var dock = userEntries.data.docs;
-
-  //   return userEntries.data.docs.map((doc) {
-  //     return Entry.fromDocument(doc);
-  //   }).toList();
-  // }
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<List<Entry>> getEntries(String uid) async {
     var userEntries = await FirebaseFirestore.instance
         .collection('entries')
@@ -29,22 +17,11 @@ class FirestoreService extends ChangeNotifier {
     }).toList();
   }
 
-  // StreamBuilder<List<Entry>> streamEntries(String uid)  {
-  //   var userEntries =  FirebaseFirestore.instance
-  //       .collection('entries')
-  //       .orderBy("entry_date", descending: true)
-  //       .where('uid', isEqualTo: uid)
-  //       .get();
-  //   return userEntries.docs.map((doc) {
-  //     return Entry.fromDocument(doc);
-  //   }).toList();
-  // }
-
   Future<void> createEntry(Entry entry) async {
     var userEntries = FirebaseFirestore.instance.collection("entries");
     userEntries
         .add(entry.toMap())
-        .catchError((error) => print('Update failed: $error'));
+        .catchError((error) => print('Entry Insertion failed: $error'));
     notifyListeners();
   }
 
@@ -54,7 +31,7 @@ class FirestoreService extends ChangeNotifier {
     await userEntries
         .doc(entryId)
         .delete()
-        .catchError((error) => print('Update failed: $error'))
+        .catchError((error) => print('Entry Deletion failed: $error'))
         .then((_) => deleteImages(imageList));
     notifyListeners();
   }
@@ -64,7 +41,7 @@ class FirestoreService extends ChangeNotifier {
       await FirebaseStorage.instance
           .refFromURL(imgLink)
           .delete()
-          .catchError((error) => print('Update failed: $error'))
+          .catchError((error) => print('Image Deletion failed: $error'))
           .whenComplete(
             () => print('Images are Deleted'),
           );
@@ -75,11 +52,30 @@ class FirestoreService extends ChangeNotifier {
   Future<void> updateEntry(entryId, Entry entry) async {
     var collection = FirebaseFirestore.instance.collection('entries');
     collection
-        .doc(entryId) // <-- Doc ID where data should be updated.
-        .update(entry.toMap()) // <-- Updated data
+        .doc(entryId)
+        .update(entry.toMap())
         .then((_) => print('Entry Updated'))
         .catchError((error) => print('Update failed: $error'));
+    notifyListeners();
   }
 
-  notifyListeners();
+  Future<void> createTag(Tag tag) async {
+    var tags = FirebaseFirestore.instance.collection("tags");
+    tags.add(tag.toMap()).catchError((error) => print('Update failed: $error'));
+    notifyListeners();
+  }
+
+  Future<List<DocumentSnapshot>> getSuggestion(String suggestion) async =>
+      await _firestore
+          .collection('tags')
+          .where('tag', isEqualTo: suggestion)
+          .get()
+          .then((snap) {
+        return snap.docs;
+      });
+
+  Future<List<QueryDocumentSnapshot>> getSearch() async =>
+      await _firestore.collection('tags').get().then((snaps) {
+        return snaps.docs;
+      });
 }
