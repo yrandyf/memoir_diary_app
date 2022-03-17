@@ -9,9 +9,8 @@ import '../services/firestore_service.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
-    entryRef, tags, tagSearchSugestions) {
+    entryRef, List tags, List tagSearchSugestions) {
   List<dynamic>? selectedTags = [];
-  String _selectedCity = '';
   return showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -48,13 +47,13 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                                             Provider.of<FirestoreService>(
                                                     context,
                                                     listen: false)
-                                                .createTag(
-                                              Tag(
-                                                  tag: tagTextController.text,
-                                                  userId: FirebaseAuth.instance
-                                                      .currentUser!.uid),
-                                            );
-                                            tags?.add(tagTextController.text);
+                                                .createTag(Tag(
+                                                    tag: tagTextController.text,
+                                                    userId: FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .uid));
+                                            tags.add(tagTextController.text);
                                             tagTextController.clear();
                                             print(
                                                 'on tage adding button = $tags');
@@ -85,7 +84,7 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                               onSuggestionSelected: (suggestion) {
                                 Tag tag = suggestion as Tag;
                                 tagTextController.text = tag.tag as String;
-                                tags!.add(tag.tag);
+                                tags.add(tag.tag);
                                 tagTextController.clear();
 
                                 print('on suggestionseected = $tags');
@@ -128,26 +127,71 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                         : Container(),
                     SizedBox(
                       height: 200,
-                      child: ListView.builder(
-                        itemCount: tags?.length,
-                        itemBuilder: (context, index) {
-                          return tags != null
-                              ? ListTile(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0)),
-                                  title: Text(tags![index]!.toString()),
-                                  trailing: IconButton(
-                                      icon: const Icon(Icons.remove_circle,
-                                          color: Colors.redAccent),
-                                      onPressed: () async {
-                                        setState(() {
-                                          tags?.removeAt(index);
-                                          print('Tag removed! $tags');
-                                        });
-                                      }))
-                              : const Center(
-                                  child: Text('No Added Tags!'),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("tags")
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> querytags) {
+                          if (querytags.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          var userTagsList = querytags.data!.docs
+                              .map((tags) {
+                                return Tag.fromDocument(tags);
+                              })
+                              .where((querytags) =>
+                                  querytags.userId ==
+                                  FirebaseAuth.instance.currentUser!.uid)
+                              .toList();
+
+                          List filteredUserTagList = userTagsList
+                              .where((tagsSet) => tags.contains(tagsSet.tag))
+                              .toList();
+
+                          return ListView.builder(
+                            itemCount: filteredUserTagList.length,
+                            itemBuilder: (context, index) {
+                              Tag tagItem = filteredUserTagList[index];
+                              if (filteredUserTagList.isEmpty) {
+                                const Center(
+                                  child: Text(
+                                    'Add Tags',
+                                  ),
                                 );
+                              }
+                              return Card(
+                                child: ListTile(
+                                  title: Text(tagItem.tag.toString()),
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.remove_circle,
+                                        color: Colors.redAccent),
+                                    onPressed: () async {
+                                      setState(
+                                        () {
+                                          FirebaseFirestore.instance
+                                              .collection("tags")
+                                              .doc(tagItem.entryId)
+                                              .delete()
+                                              .catchError((error) => print(
+                                                  'Entry Deletion failed: $error'));
+                                          tags.removeAt(tags.indexWhere(
+                                              ((tag) =>
+                                                  tag.contains(tagItem.tag))));
+                                          print('Tag removed! $tags');
+                                          print(tags.length);
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                         },
                       ),
                     )

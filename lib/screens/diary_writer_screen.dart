@@ -92,9 +92,8 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   List<dynamic>? selectedTags = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final tagTextController = TextEditingController();
-  List? tags = [];
+  List<String> tags = [];
   List tagSearchSugestions = [];
-  String _selectedCity = 'asdasd';
 
   Future getDocs() async {
     tagSearchSugestions = (await Provider.of<FirestoreService>(context,

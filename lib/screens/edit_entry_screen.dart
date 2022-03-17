@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -55,7 +56,13 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
   DropDownItems? selectedActivity;
   DropDownItems? selectedMood;
   List tagSearchSugestions = [];
-  List? tags = [];
+  List tags = [];
+
+  List<dynamic>? selectedTags = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final tagTextController = TextEditingController();
+  CollectionReference? entryRef =
+      FirebaseFirestore.instance.collection('entries');
 
   late final quill.QuillController _controller = quill.QuillController(
     document: quill.Document.fromJson(selectedEntry as List<dynamic>),
@@ -109,7 +116,8 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    tags = Provider.of<EntryBuilderService>(context, listen: false).entry!.tags;
+    tags =
+        Provider.of<EntryBuilderService>(context, listen: false).entry!.tags!;
     String? activity = Provider.of<EntryBuilderService>(context, listen: false)
         .entry!
         .position;
@@ -139,10 +147,18 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              
-            },
             icon: Icon(Icons.tag),
+            onPressed: () {
+              tagModalSheet(
+                context,
+                _formKey,
+                tagTextController,
+                entryRef,
+                tags,
+                tagSearchSugestions,
+              );
+              print(tags);
+            },
           ),
           PopupMenuButton(
             onSelected: (value) => setState(() {}),
