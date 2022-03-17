@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,12 +9,14 @@ import 'package:memoir_diary_app/screens/tabs/tab_1_main/home_main_tab.dart';
 import 'package:memoir_diary_app/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../models/Entry.dart';
+import '../models/Tag.dart';
 import '../services/entry_data_service.dart';
 import '../services/location_service.dart';
 import '../utils/icon_switch.dart';
 import '../widgets/edit_screen/edit_page_image_picker.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import '../widgets/tab_widget.dart';
+import '../widgets/tag_sheet_temp.dart';
 import 'view_entry_screen.dart';
 
 class EditEntryScreen extends StatefulWidget {
@@ -44,12 +47,15 @@ List<dynamic>? selectedEntry;
 bool isLoading = false;
 var place;
 List<dynamic>? _tempImageList = [];
-
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+var tagTextController = TextEditingController();
 // String dropdownValue = 'One';
 
 class _EditEntryScreenState extends State<EditEntryScreen> {
   DropDownItems? selectedActivity;
   DropDownItems? selectedMood;
+  List tagSearchSugestions = [];
+  List? tags = [];
 
   late final quill.QuillController _controller = quill.QuillController(
     document: quill.Document.fromJson(selectedEntry as List<dynamic>),
@@ -77,6 +83,24 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
     }
   }
 
+  Future getDocs() async {
+    tagSearchSugestions = (await Provider.of<FirestoreService>(context,
+                listen: false)
+            .getSearch())
+        .map((tags) {
+          return Tag.fromDocument(tags);
+        })
+        .where(
+            (entry) => entry.userId == FirebaseAuth.instance.currentUser!.uid)
+        .toList();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getDocs();
+    super.initState();
+  }
   // @override
   // void deactivate() {
   //   super.deactivate();
@@ -85,6 +109,7 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tags = Provider.of<EntryBuilderService>(context, listen: false).entry!.tags;
     String? activity = Provider.of<EntryBuilderService>(context, listen: false)
         .entry!
         .position;
@@ -115,7 +140,7 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              print(selectedDiaryEntry.entryId);
+              
             },
             icon: Icon(Icons.tag),
           ),

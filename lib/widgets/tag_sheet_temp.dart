@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/models/Tag.dart';
 import 'package:provider/provider.dart';
+import '../services/entry_data_service.dart';
 import '../services/firestore_service.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
@@ -12,7 +12,6 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
     entryRef, tags, tagSearchSugestions) {
   List<dynamic>? selectedTags = [];
   String _selectedCity = '';
-
   return showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -31,116 +30,122 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                     Form(
                       key: _formKey,
                       child: Padding(
-                        padding: EdgeInsets.all(15.0),
+                        padding: EdgeInsets.all(10),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             TypeAheadFormField(
                               textFieldConfiguration: TextFieldConfiguration(
                                 controller: tagTextController,
-                                focusNode: FocusNode(),
                                 decoration: InputDecoration(
+                                  labelText: 'Enter Tag',
                                   suffixIcon: IconButton(
                                     icon: const Icon(Icons.add_box_outlined),
                                     onPressed: () {
-                                      setState(() {
-                                        Provider.of<FirestoreService>(context,
-                                                listen: false)
-                                            .createTag(
-                                          Tag(
-                                              tag: tagTextController.text,
-                                              userId: FirebaseAuth
-                                                  .instance.currentUser!.uid),
-                                        );
-                                      });
-                                      print('tage added');
+                                      setState(
+                                        () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            Provider.of<FirestoreService>(
+                                                    context,
+                                                    listen: false)
+                                                .createTag(
+                                              Tag(
+                                                  tag: tagTextController.text,
+                                                  userId: FirebaseAuth.instance
+                                                      .currentUser!.uid),
+                                            );
+                                            tags?.add(tagTextController.text);
+                                            tagTextController.clear();
+                                            print(
+                                                'on tage adding button = $tags');
+                                          }
+                                        },
+                                      );
+                                      print('tag added');
                                     },
                                   ),
-                                  labelText: 'Enter Tag',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),
                               ),
                               suggestionsCallback: (pattern) {
-                                return tagSearchSugestions.where((doc) =>
-                                    jsonEncode(doc)
-                                        .toLowerCase()
-                                        .contains(pattern.toLowerCase()));
-                              },
-                              itemBuilder: (context, suggestion) {
-                                Tag? tag = suggestion as Tag?;
-                                return ListTile(
-                                  title: Text(
-                                      suggestion?.tag.toString() as String),
+                                return tagSearchSugestions.where(
+                                  (doc) => jsonEncode(doc)
+                                      .toLowerCase()
+                                      .contains(pattern.toLowerCase()),
                                 );
                               },
-                              transitionBuilder:
-                                  (context, suggestionsBox, controller) {
-                                return suggestionsBox;
+                              itemBuilder: (context, suggestion) {
+                                Tag tag = suggestion as Tag;
+                                return ListTile(
+                                  title: Text(tag.tag as String),
+                                );
                               },
                               onSuggestionSelected: (suggestion) {
-                                setState(() {
-                                  Tag? tag = suggestion as Tag?;
-                                  tags.add(
-                                      suggestion?.tag.toString() as String);
-                                });
-                                print(tags);
+                                Tag tag = suggestion as Tag;
+                                tagTextController.text = tag.tag as String;
+                                tags!.add(tag.tag);
+                                tagTextController.clear();
+
+                                print('on suggestionseected = $tags');
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Please Enter a tag name';
+                                  return 'Please select a city';
                                 }
                               },
-                              onSaved: (value) => _selectedCity = value!,
+                              onSaved: (value) {
+                                tags!.add(value);
+                                print('tags on saved print= ${tags}');
+                              },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10.0,
                             ),
                             // RaisedButton(
                             //   child: Text('Submit'),
                             //   onPressed: () {
-                            //     if (_formKey.currentState.validate()) {
-                            //       _formKey.currentState.save();
-                            //       Scaffold.of(context).showSnackBar(SnackBar(
-                            //           content: Text(
-                            //               'Your Favorite City is ${_selectedCity}')));
-                            //     }
+                            //     setState(() {
+                            //       if (_formKey.currentState!.validate()) {
+                            //         _formKey.currentState!.save();
+                            //         print('meka thma eeka list eka = $tags');
+                            //       }
+                            //     });
                             //   },
-                            // ),
+                            // )
                           ],
                         ),
                       ),
                     ),
                     // Divider(),
                     tags == null
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 15),
+                        ? const Padding(
+                            padding: EdgeInsets.only(left: 15),
                             child: Text('Assigned Tags',
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                           )
                         : Container(),
                     SizedBox(
-                      height: 90,
+                      height: 200,
                       child: ListView.builder(
-                        itemCount: tags.length,
+                        itemCount: tags?.length,
                         itemBuilder: (context, index) {
                           return tags != null
                               ? ListTile(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5.0)),
-                                  title: Text(tags[index].toString()),
+                                  title: Text(tags![index]!.toString()),
                                   trailing: IconButton(
                                       icon: const Icon(Icons.remove_circle,
                                           color: Colors.redAccent),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         setState(() {
-                                          tags.removeAt(index);
-                                          print(tags);
+                                          tags?.removeAt(index);
+                                          print('Tag removed! $tags');
                                         });
                                       }))
-                              : Center(
+                              : const Center(
                                   child: Text('No Added Tags!'),
                                 );
                         },

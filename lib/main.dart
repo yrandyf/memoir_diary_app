@@ -8,6 +8,7 @@ import 'screens/diary_writer_screen.dart';
 import 'screens/edit_entry_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/tag_screen.dart';
 import 'screens/view_entry_screen.dart';
 import 'services/entry_data_service.dart';
 import 'services/firestore_service.dart';
@@ -61,6 +62,8 @@ class MyApp extends StatelessWidget {
         ActivityRecognitionApp.routeName: (ctx) => ActivityRecognitionApp(),
         ViewEntryScreen.routeName: (ctx) => ViewEntryScreen(),
         EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
+        EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
+        // TagSelectionScreen.routeName: (ctx) => TagSelectionScreen()
       },
     );
   }

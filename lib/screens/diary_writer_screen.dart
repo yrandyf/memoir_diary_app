@@ -19,10 +19,12 @@ import '../services/images_service.dart';
 import '../services/location_service.dart';
 import '../services/tag_Service.dart';
 import '../widgets/image_picker.dart';
-import '../widgets/tag_sheet.dart';
+import '../widgets/tag_sheet_temp.dart';
 import 'activty_temp.dart';
 import 'tabs/tab_1_main/home_main_tab.dart';
 import 'package:path/path.dart' as Path;
+
+import 'tag_screen.dart';
 
 class DiaryWriterScreen extends StatefulWidget {
   static const routeName = '/writer';
@@ -39,7 +41,6 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
     selection: const TextSelection.collapsed(offset: 0),
   );
 
-  var tagTextController = TextEditingController();
   DateTime selectedEntryDate = DateTime.now();
   bool isLoading = false;
 
@@ -87,10 +88,13 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
       FirebaseFirestore.instance.collection('entries');
 
   // final _formKey = GlobalKey<FormState>();
-  List? tags = [];
 
+  List<dynamic>? selectedTags = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final tagTextController = TextEditingController();
+  List? tags = [];
   List tagSearchSugestions = [];
+  String _selectedCity = 'asdasd';
 
   Future getDocs() async {
     tagSearchSugestions = (await Provider.of<FirestoreService>(context,
@@ -102,6 +106,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
         .where(
             (entry) => entry.userId == FirebaseAuth.instance.currentUser!.uid)
         .toList();
+    // print(tagSearchSugestions);
     setState(() {});
   }
 
@@ -128,6 +133,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
           IconButton(
             icon: Icon(Icons.tag),
             onPressed: () {
+              // Navigator.of(context).pushNamed(TagSelectionScreen.routeName);
               tagModalSheet(
                 context,
                 _formKey,
@@ -136,6 +142,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                 tags,
                 tagSearchSugestions,
               );
+              print(tags);
             },
           ),
           PopupMenuButton(
@@ -216,7 +223,6 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                       displayImagePicker(context, _images);
                       setState(() {});
                     }
-
                     print(_images);
                   },
                 ),
@@ -254,7 +260,8 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                                     : '${place.locality}, ${place.country}',
                                 mood: selectedMood?.name,
                                 image_list: _tempImageList,
-                                position: selectedActivity?.name))
+                                position: selectedActivity?.name,
+                                tags: tags))
                             .whenComplete(
                           () {
                             Navigator.of(context).pop();
@@ -312,7 +319,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                             iconSize: 0,
                             alignment: AlignmentDirectional.center,
                             hint: selectedActivity == null
-                                ? Icon(Icons.accessibility_new)
+                                ? const Icon(Icons.accessibility_new)
                                 : selectedActivity?.icon,
                             value: selectedActivity,
                             onChanged: (value) {
@@ -337,71 +344,6 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                           ),
                         ),
                       ),
-                      // PopupMenuButton(
-                      //   onSelected: (value) => setState(() {
-                      //     selectedActivity = value.toString();
-                      //     print(selectedActivity);
-                      //   }),
-                      //   icon: const Icon(Icons.accessibility_new),
-                      //   itemBuilder: (BuildContext bc) {
-                      //     return [
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.directions_walk),
-                      //             Text.Text('Walking'),
-                      //           ],
-                      //         ),
-                      //         value: 'Walking',
-                      //       ),
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.chair),
-                      //             Text.Text('Sitting'),
-                      //           ],
-                      //         ),
-                      //         value: 'Sitting',
-                      //       ),
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.boy_outlined),
-                      //             Text.Text('Standing'),
-                      //           ],
-                      //         ),
-                      //         value: 'Standing',
-                      //       ),
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.hotel),
-                      //             Text.Text('Nap'),
-                      //           ],
-                      //         ),
-                      //         value: 'Nap',
-                      //       ),
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.auto_fix_high),
-                      //             Text.Text('Auto Detect'),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ];
-                      //   },
-                      // ),
                     ),
                   ),
                   Flexible(
@@ -444,52 +386,6 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                           ),
                         ),
                       ),
-                      // PopupMenuButton(
-                      //   onSelected: (value) => setState(
-                      //     () {
-                      //       selectedMood = value.toString();
-                      //       print(selectedMood);
-                      //     },
-                      //   ),
-                      //   icon: const Icon(Icons.mood),
-                      //   itemBuilder: (BuildContext bc) {
-                      //     return [
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.sentiment_very_satisfied_outlined),
-                      //             Text.Text('Happy'),
-                      //           ],
-                      //         ),
-                      //         value: 'Happy',
-                      //       ),
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.sentiment_dissatisfied_sharp),
-                      //             Text.Text('     Sad'),
-                      //           ],
-                      //         ),
-                      //         value: 'Sad',
-                      //       ),
-                      //       PopupMenuItem(
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceAround,
-                      //           children: [
-                      //             Icon(Icons.sentiment_neutral_outlined),
-                      //             Text.Text('Average'),
-                      //           ],
-                      //         ),
-                      //         value: 'Average',
-                      //       )
-                      //     ];
-                      //   },
-                      // ),
                     ),
                   ),
                   Expanded(
