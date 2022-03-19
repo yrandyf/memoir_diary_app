@@ -17,6 +17,9 @@ setActivityIcon(String name) {
     case "Auto Detect":
       print("AD");
       return Icon(Icons.auto_fix_high);
+
+    default:
+      return Icon(Icons.boy_outlined);
   }
 }
 
@@ -34,5 +37,7 @@ setMoodIcon(String name) {
     case "Dissatisfied":
       print("Case Dissatisfied");
       return Icon(Icons.sentiment_very_dissatisfied_outlined);
+    default:
+      return Icon(Icons.sentiment_very_satisfied_outlined);
   }
 }

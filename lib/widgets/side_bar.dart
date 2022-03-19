@@ -52,7 +52,8 @@ class SideBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
-            onTap: () => {},
+            onTap: () =>
+                {Navigator.of(context).popUntil((route) => route.isFirst)},
           ),
           ListTile(
             leading: Icon(Icons.settings),

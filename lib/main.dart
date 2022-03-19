@@ -6,6 +6,7 @@ import 'screens/auth/signup_screen.dart';
 import 'screens/activty_temp.dart';
 import 'screens/diary_writer_screen.dart';
 import 'screens/edit_entry_screen.dart';
+import 'screens/search_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/tag_screen.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
         ActivityRecognitionApp.routeName: (ctx) => ActivityRecognitionApp(),
         ViewEntryScreen.routeName: (ctx) => ViewEntryScreen(),
         EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
-        EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
+        SearchBar.routeName: (ctx) => SearchBar(),
         // TagSelectionScreen.routeName: (ctx) => TagSelectionScreen()
       },
     );

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../screens/search_screen.dart';
 import '../screens/tabs/tab_2/calender_screen.dart';
 import '../screens/tabs/tab_1_main/home_main_tab.dart';
 import '../services/images_service.dart';
@@ -40,7 +41,13 @@ class _HomePageState extends State<HomePage> {
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
-              new SliverAppBar(
+              SliverAppBar(
+                actions: [
+                  IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed(SearchBar.routeName))
+                ],
                 title: const Text('Memoire'),
                 pinned: true,
                 floating: true,
