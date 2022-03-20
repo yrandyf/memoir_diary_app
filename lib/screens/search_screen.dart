@@ -67,9 +67,9 @@ class _SearchBarState extends State<SearchBar> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Mood',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 15),
@@ -102,7 +102,7 @@ class _SearchBarState extends State<SearchBar> {
                                       arguments: mood);
                                 }),
                             IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.sentiment_dissatisfied_sharp,
                                   size: 45,
                                   color: Colors.grey,
@@ -129,11 +129,12 @@ class _SearchBarState extends State<SearchBar> {
                       const SizedBox(height: 15),
                       const Divider(),
                       const SizedBox(height: 15),
-                      Text(
+                      const Text(
                         'Activity',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
+                      const SizedBox(height: 15),
                       Wrap(
                         alignment: WrapAlignment.spaceBetween,
                         crossAxisAlignment: WrapCrossAlignment.center,
@@ -207,9 +208,9 @@ class _SearchBarState extends State<SearchBar> {
                       const SizedBox(height: 15),
                       const Divider(),
                       const SizedBox(height: 15),
-                      Text(
+                      const Text(
                         'Tags',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 15),
