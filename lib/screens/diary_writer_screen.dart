@@ -19,12 +19,10 @@ import '../services/images_service.dart';
 import '../services/location_service.dart';
 import '../services/tag_Service.dart';
 import '../widgets/image_picker.dart';
-import '../widgets/tag_sheet_temp.dart';
+import '../widgets/tag_sheet.dart';
 import 'activty_temp.dart';
 import 'tabs/tab_1_main/home_main_tab.dart';
 import 'package:path/path.dart' as Path;
-
-import 'tag_screen.dart';
 
 class DiaryWriterScreen extends StatefulWidget {
   static const routeName = '/writer';
@@ -132,7 +130,6 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
           IconButton(
             icon: Icon(Icons.tag),
             onPressed: () {
-              // Navigator.of(context).pushNamed(TagSelectionScreen.routeName);
               tagModalSheet(
                 context,
                 _formKey,

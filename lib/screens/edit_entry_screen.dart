@@ -17,7 +17,7 @@ import '../utils/icon_switch.dart';
 import '../widgets/edit_screen/edit_page_image_picker.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import '../widgets/tab_widget.dart';
-import '../widgets/tag_sheet_temp.dart';
+import '../widgets/tag_sheet.dart';
 import 'view_entry_screen.dart';
 
 class EditEntryScreen extends StatefulWidget {

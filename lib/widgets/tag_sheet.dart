@@ -102,17 +102,6 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                             const SizedBox(
                               height: 10.0,
                             ),
-                            // RaisedButton(
-                            //   child: Text('Submit'),
-                            //   onPressed: () {
-                            //     setState(() {
-                            //       if (_formKey.currentState!.validate()) {
-                            //         _formKey.currentState!.save();
-                            //         print('meka thma eeka list eka = $tags');
-                            //       }
-                            //     });
-                            //   },
-                            // )
                           ],
                         ),
                       ),

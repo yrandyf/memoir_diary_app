@@ -2,14 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/firebase_options.dart';
 import 'package:provider/provider.dart';
+import 'screens/activity_categorized_list.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/activty_temp.dart';
+import 'screens/mood_categorized_entry_list_view.dart';
 import 'screens/diary_writer_screen.dart';
 import 'screens/edit_entry_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
-import 'screens/tag_screen.dart';
 import 'screens/view_entry_screen.dart';
 import 'services/entry_data_service.dart';
 import 'services/firestore_service.dart';
@@ -64,7 +65,10 @@ class MyApp extends StatelessWidget {
         ViewEntryScreen.routeName: (ctx) => ViewEntryScreen(),
         EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
         SearchBar.routeName: (ctx) => SearchBar(),
-        // TagSelectionScreen.routeName: (ctx) => TagSelectionScreen()
+        MoodCategorizedEntryListView.routeName: (ctx) =>
+            MoodCategorizedEntryListView(),
+        ActivityCategorizedEntryListView.routeName: (ctx) =>
+            ActivityCategorizedEntryListView(),
       },
     );
   }
