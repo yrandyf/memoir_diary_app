@@ -11,6 +11,7 @@ import '../models/Tag.dart';
 import '../services/entry_data_service.dart';
 import '../utils/icon_switch.dart';
 import 'activity_categorized_list.dart';
+import 'categorized_tags_listview.dart';
 import 'mood_categorized_entry_list_view.dart';
 import 'view_entry_screen.dart';
 
@@ -136,8 +137,9 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       const SizedBox(height: 15),
                       Wrap(
-                        alignment: WrapAlignment.spaceBetween,
-                        crossAxisAlignment: WrapCrossAlignment.center,
+                        alignment: WrapAlignment.start,
+                        spacing: 12,
+                        crossAxisAlignment: WrapCrossAlignment.start,
                         children: [
                           InkWell(
                             onTap: () {
@@ -215,7 +217,7 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       const SizedBox(height: 15),
                       SizedBox(
-                        height: 200,
+                        height: 250,
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection("tags")
@@ -256,7 +258,13 @@ class _SearchBarState extends State<SearchBar> {
                                 return Card(
                                   child: ListTile(
                                     title: Text(tagItem.tag.toString()),
-                                    onTap: () {},
+                                    onTap: () {
+                                      String tag = tagItem.tag as String;
+                                      print(tag);
+                                      Navigator.of(context).pushNamed(
+                                          TagsCategorizedListView.routeName,
+                                          arguments: tag);
+                                    },
                                   ),
                                 );
                               },

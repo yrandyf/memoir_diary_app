@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'screens/activity_categorized_list.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/activty_temp.dart';
+import 'screens/categorized_tags_listview.dart';
 import 'screens/mood_categorized_entry_list_view.dart';
 import 'screens/diary_writer_screen.dart';
 import 'screens/edit_entry_screen.dart';
@@ -69,6 +70,8 @@ class MyApp extends StatelessWidget {
             MoodCategorizedEntryListView(),
         ActivityCategorizedEntryListView.routeName: (ctx) =>
             ActivityCategorizedEntryListView(),
+        TagsCategorizedListView.routeName: (ctx) =>
+            TagsCategorizedListView(),
       },
     );
   }
