@@ -95,7 +95,7 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                                 }
                               },
                               onSaved: (value) {
-                                tags!.add(value);
+                                tags.add(value);
                                 print('tags on saved print= ${tags}');
                               },
                             ),

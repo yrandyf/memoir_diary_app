@@ -7,7 +7,7 @@ import '/widgets/main_screen/entry_list_item.dart';
 import '/widgets/main_screen/flexible_space_widget.dart';
 
 class MoodCategorizedEntryListView extends StatefulWidget {
-  static const routeName = '/categorizedListView';
+  static const routeName = '/moodcategorizedListView';
   const MoodCategorizedEntryListView({Key? key}) : super(key: key);
 
   @override
