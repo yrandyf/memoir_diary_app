@@ -149,6 +149,7 @@ class _SearchBarState extends State<SearchBar> {
                                   arguments: activty);
                             },
                             child: const Chip(
+                              shape: StadiumBorder(side: BorderSide()),
                               labelPadding: EdgeInsets.only(
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.boy_outlined),
@@ -165,6 +166,7 @@ class _SearchBarState extends State<SearchBar> {
                                   arguments: activty);
                             },
                             child: const Chip(
+                              shape: StadiumBorder(side: BorderSide()),
                               labelPadding: EdgeInsets.only(
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.directions_walk),
@@ -181,6 +183,7 @@ class _SearchBarState extends State<SearchBar> {
                                   arguments: activty);
                             },
                             child: const Chip(
+                              shape: StadiumBorder(side: BorderSide()),
                               labelPadding: EdgeInsets.only(
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.chair),
@@ -197,6 +200,7 @@ class _SearchBarState extends State<SearchBar> {
                                   arguments: activty);
                             },
                             child: const Chip(
+                              shape: StadiumBorder(side: BorderSide()),
                               labelPadding: EdgeInsets.only(
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.hotel),

@@ -70,8 +70,7 @@ class MyApp extends StatelessWidget {
             MoodCategorizedEntryListView(),
         ActivityCategorizedEntryListView.routeName: (ctx) =>
             ActivityCategorizedEntryListView(),
-        TagsCategorizedListView.routeName: (ctx) =>
-            TagsCategorizedListView(),
+        TagsCategorizedListView.routeName: (ctx) => TagsCategorizedListView(),
       },
     );
   }
