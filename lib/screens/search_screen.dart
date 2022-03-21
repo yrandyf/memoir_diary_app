@@ -260,7 +260,6 @@ class _SearchBarState extends State<SearchBar> {
                                     title: Text(tagItem.tag.toString()),
                                     onTap: () {
                                       String tag = tagItem.tag as String;
-                                      print(tag);
                                       Navigator.of(context).pushNamed(
                                           TagsCategorizedListView.routeName,
                                           arguments: tag);
