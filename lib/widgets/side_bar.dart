@@ -3,10 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/screens/auth/login_screen.dart';
 import 'package:memoir_diary_app/services/firebase_user_auth.dart';
-
 import '../models/Tag.dart';
 import '../screens/categorized_tags_listview.dart';
-import 'epantion_tile.dart';
 
 class SideBar extends StatelessWidget {
   @override
