@@ -91,7 +91,7 @@ Future<dynamic> tagModalSheet(BuildContext context, _formKey, tagTextController,
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Please select a city';
+                                  return 'Please select a tag';
                                 }
                               },
                               onSaved: (value) {

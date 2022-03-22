@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'dart:io';
@@ -19,6 +21,7 @@ import '../services/images_service.dart';
 import '../services/location_service.dart';
 import '../services/tag_Service.dart';
 import '../widgets/image_picker.dart';
+import '../widgets/location_sheet.dart';
 import '../widgets/tag_sheet.dart';
 import 'activty_temp.dart';
 import 'tabs/tab_1_main/home_main_tab.dart';
@@ -79,7 +82,9 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
 
   DropDownItems? selectedMood;
   DropDownItems? selectedActivity;
-  var place;
+  Placemark? place;
+  Position? coordinates;
+
   List<File> _images = [];
   List<String> _tempImageList = [];
   CollectionReference? entryRef =
@@ -87,9 +92,96 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
 
   // final _formKey = GlobalKey<FormState>();
 
+  _show(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      elevation: 5,
+      context: ctx,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder:
+              (BuildContext context, void Function(void Function()) setState) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+              child: Wrap(
+                children: [
+                  Form(
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Form(
+                        key: _formKey2,
+                        child: Column(
+                          children: <Widget>[
+                            TextFormField(
+                              controller: locationTextController,
+                              decoration: InputDecoration(
+                                labelText: 'Enter Location',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.check),
+                                  onPressed: () {},
+                                ),
+                              ),
+                              validator: (value) {
+                                if (_formKey2.currentState!.validate()) {
+                                  if (value!.isEmpty) {
+                                    return 'Please Enter a Valid City';
+                                  }
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            Text.Text(
+                                place != null
+                                    ? '${place?.locality}, ${place?.country}'
+                                    : 'Select a Location',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500)),
+                            const SizedBox(height: 15),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.my_location,
+                                size: 45,
+                                color: Colors.blue,
+                              ),
+                              onPressed: () async {
+                                Position position =
+                                    await Provider.of<LocationService>(context,
+                                            listen: false)
+                                        .getLocationCoordinates();
+                                Placemark location =
+                                    await Provider.of<LocationService>(context,
+                                            listen: false)
+                                        .getAddressFromCoordinates(position);
+                                setState(() {
+                                  coordinates = position;
+                                  place = location;
+                                  print(place?.country);
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   List<dynamic>? selectedTags = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   final tagTextController = TextEditingController();
+  final locationTextController = TextEditingController();
   List<String> tags = [];
   List tagSearchSugestions = [];
 
@@ -141,41 +233,46 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
               print(tags);
             },
           ),
-          PopupMenuButton(
-            onSelected: (value) => setState(() {
-              // selectedMood = value.toString();
-              // print(selectedMood);
-            }),
-            icon: const Icon(Icons.my_location_rounded),
-            itemBuilder: (BuildContext bc) {
-              return [
-                PopupMenuItem(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Icon(Icons.location_on, color: Colors.black),
-                      Text.Text(place == null
-                          ? 'Current Location'
-                          : '${place.locality}, ${place.country}'),
-                    ],
-                  ),
-                  value: 'sad',
-                  onTap: () async {
-                    Position position = await Provider.of<LocationService>(
-                            context,
-                            listen: false)
-                        .getLocationCoordinates();
-                    Placemark location = await Provider.of<LocationService>(
-                            context,
-                            listen: false)
-                        .getAddressFromCoordinates(position);
-                    place = location;
-                    print(place.country);
-                  },
-                ),
-              ];
-            },
-          ),
+          IconButton(
+              icon: const Icon(Icons.my_location_rounded),
+              onPressed: () {
+                print(place);
+                _show(context);
+              }),
+          // PopupMenuButton(
+          //   onSelected: (value) => setState(() {
+          //     locationModalSheet(context);
+          //   }),
+          //   icon: const Icon(Icons.my_location_rounded),
+          //   itemBuilder: (BuildContext bc) {
+          //     return [
+          //       PopupMenuItem(
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //           children: [
+          //             Icon(Icons.location_on, color: Colors.black),
+          //             Text.Text(place == null
+          //                 ? 'Current Location'
+          //                 : '${place.locality}, ${place.country}'),
+          //           ],
+          //         ),
+          //         onTap: () async {
+          //           locationModalSheet(context);
+          //           // Position position = await Provider.of<LocationService>(
+          //           //         context,
+          //           //         listen: false)
+          //           //     .getLocationCoordinates();
+          //           // Placemark location = await Provider.of<LocationService>(
+          //           //         context,
+          //           //         listen: false)
+          //           //     .getAddressFromCoordinates(position);
+          //           // place = location;
+          //           // print(place.country);
+          //         },
+          //       ),
+          //     ];
+          //   },
+          // ),
           _images.isNotEmpty
               ? Badge(
                   badgeColor: Colors.white70,
@@ -253,10 +350,12 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                                 timeStamp: DateTime.now(),
                                 location: place == null
                                     ? 'null'
-                                    : '${place.locality}, ${place.country}',
+                                    : '${place!.locality}, ${place!.country}',
                                 mood: selectedMood?.name,
                                 image_list: _tempImageList,
                                 position: selectedActivity?.name,
+                                lat: coordinates?.latitude,
+                                long: coordinates?.longitude,
                                 tags: tags))
                             .whenComplete(
                           () {

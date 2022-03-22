@@ -28,6 +28,8 @@ class _$EntryTearOff {
       String? contentSummery,
       DateTime? date,
       String? location,
+      double? lat,
+      double? long,
       String? position,
       String? mood,
       List<dynamic>? image_list,
@@ -40,6 +42,8 @@ class _$EntryTearOff {
       contentSummery: contentSummery,
       date: date,
       location: location,
+      lat: lat,
+      long: long,
       position: position,
       mood: mood,
       image_list: image_list,
@@ -64,6 +68,8 @@ mixin _$Entry {
   String? get contentSummery => throw _privateConstructorUsedError;
   DateTime? get date => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
+  double? get lat => throw _privateConstructorUsedError;
+  double? get long => throw _privateConstructorUsedError;
   String? get position => throw _privateConstructorUsedError;
   String? get mood => throw _privateConstructorUsedError;
   List<dynamic>? get image_list => throw _privateConstructorUsedError;
@@ -86,6 +92,8 @@ abstract class $EntryCopyWith<$Res> {
       String? contentSummery,
       DateTime? date,
       String? location,
+      double? lat,
+      double? long,
       String? position,
       String? mood,
       List<dynamic>? image_list,
@@ -109,6 +117,8 @@ class _$EntryCopyWithImpl<$Res> implements $EntryCopyWith<$Res> {
     Object? contentSummery = freezed,
     Object? date = freezed,
     Object? location = freezed,
+    Object? lat = freezed,
+    Object? long = freezed,
     Object? position = freezed,
     Object? mood = freezed,
     Object? image_list = freezed,
@@ -137,6 +147,14 @@ class _$EntryCopyWithImpl<$Res> implements $EntryCopyWith<$Res> {
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
+      lat: lat == freezed
+          ? _value.lat
+          : lat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      long: long == freezed
+          ? _value.long
+          : long // ignore: cast_nullable_to_non_nullable
+              as double?,
       position: position == freezed
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -176,6 +194,8 @@ abstract class _$EntryCopyWith<$Res> implements $EntryCopyWith<$Res> {
       String? contentSummery,
       DateTime? date,
       String? location,
+      double? lat,
+      double? long,
       String? position,
       String? mood,
       List<dynamic>? image_list,
@@ -200,6 +220,8 @@ class __$EntryCopyWithImpl<$Res> extends _$EntryCopyWithImpl<$Res>
     Object? contentSummery = freezed,
     Object? date = freezed,
     Object? location = freezed,
+    Object? lat = freezed,
+    Object? long = freezed,
     Object? position = freezed,
     Object? mood = freezed,
     Object? image_list = freezed,
@@ -228,6 +250,14 @@ class __$EntryCopyWithImpl<$Res> extends _$EntryCopyWithImpl<$Res>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
+      lat: lat == freezed
+          ? _value.lat
+          : lat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      long: long == freezed
+          ? _value.long
+          : long // ignore: cast_nullable_to_non_nullable
+              as double?,
       position: position == freezed
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -266,6 +296,8 @@ class _$_Entry extends _Entry {
       this.contentSummery,
       this.date,
       this.location,
+      this.lat,
+      this.long,
       this.position,
       this.mood,
       this.image_list,
@@ -288,6 +320,10 @@ class _$_Entry extends _Entry {
   @override
   final String? location;
   @override
+  final double? lat;
+  @override
+  final double? long;
+  @override
   final String? position;
   @override
   final String? mood;
@@ -302,7 +338,7 @@ class _$_Entry extends _Entry {
 
   @override
   String toString() {
-    return 'Entry(entryId: $entryId, content: $content, contentSummery: $contentSummery, date: $date, location: $location, position: $position, mood: $mood, image_list: $image_list, timeStamp: $timeStamp, userId: $userId, tags: $tags)';
+    return 'Entry(entryId: $entryId, content: $content, contentSummery: $contentSummery, date: $date, location: $location, lat: $lat, long: $long, position: $position, mood: $mood, image_list: $image_list, timeStamp: $timeStamp, userId: $userId, tags: $tags)';
   }
 
   @override
@@ -316,6 +352,8 @@ class _$_Entry extends _Entry {
                 .equals(other.contentSummery, contentSummery) &&
             const DeepCollectionEquality().equals(other.date, date) &&
             const DeepCollectionEquality().equals(other.location, location) &&
+            const DeepCollectionEquality().equals(other.lat, lat) &&
+            const DeepCollectionEquality().equals(other.long, long) &&
             const DeepCollectionEquality().equals(other.position, position) &&
             const DeepCollectionEquality().equals(other.mood, mood) &&
             const DeepCollectionEquality()
@@ -333,6 +371,8 @@ class _$_Entry extends _Entry {
       const DeepCollectionEquality().hash(contentSummery),
       const DeepCollectionEquality().hash(date),
       const DeepCollectionEquality().hash(location),
+      const DeepCollectionEquality().hash(lat),
+      const DeepCollectionEquality().hash(long),
       const DeepCollectionEquality().hash(position),
       const DeepCollectionEquality().hash(mood),
       const DeepCollectionEquality().hash(image_list),
@@ -358,6 +398,8 @@ abstract class _Entry extends Entry {
       String? contentSummery,
       DateTime? date,
       String? location,
+      double? lat,
+      double? long,
       String? position,
       String? mood,
       List<dynamic>? image_list,
@@ -378,6 +420,10 @@ abstract class _Entry extends Entry {
   DateTime? get date;
   @override
   String? get location;
+  @override
+  double? get lat;
+  @override
+  double? get long;
   @override
   String? get position;
   @override

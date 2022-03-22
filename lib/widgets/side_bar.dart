@@ -5,6 +5,7 @@ import 'package:memoir_diary_app/screens/auth/login_screen.dart';
 import 'package:memoir_diary_app/services/firebase_user_auth.dart';
 import '../models/Tag.dart';
 import '../screens/categorized_tags_listview.dart';
+import '../screens/tabs/tab_4/map_screen.dart';
 
 class SideBar extends StatelessWidget {
   @override
@@ -59,6 +60,11 @@ class SideBar extends StatelessWidget {
                 {Navigator.of(context).popUntil((route) => route.isFirst)},
           ),
           ListTile(
+            leading: Icon(Icons.map),
+            title: Text('Map'),
+            onTap: () => {Navigator.of(context).pushNamed(MapScreen.routeName)},
+          ),
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () => {Navigator.of(context).pop()},
@@ -103,7 +109,7 @@ class SideBar extends StatelessWidget {
                 ),
                 children: <Widget>[
                   SizedBox(
-                    height: 250,
+                    height: 220,
                     child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection("tags")

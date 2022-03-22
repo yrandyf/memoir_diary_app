@@ -13,6 +13,8 @@ _$_Entry _$$_EntryFromJson(Map<String, dynamic> json) => _$_Entry(
       date:
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
       location: json['location'] as String?,
+      lat: (json['lat'] as num?)?.toDouble(),
+      long: (json['long'] as num?)?.toDouble(),
       position: json['position'] as String?,
       mood: json['mood'] as String?,
       image_list: json['image_list'] as List<dynamic>?,
@@ -29,6 +31,8 @@ Map<String, dynamic> _$$_EntryToJson(_$_Entry instance) => <String, dynamic>{
       'contentSummery': instance.contentSummery,
       'date': instance.date?.toIso8601String(),
       'location': instance.location,
+      'lat': instance.lat,
+      'long': instance.long,
       'position': instance.position,
       'mood': instance.mood,
       'image_list': instance.image_list,

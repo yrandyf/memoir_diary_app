@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../screens/search_screen.dart';
 import '../screens/tabs/tab_2/calender_screen.dart';
 import '../screens/tabs/tab_1_main/home_main_tab.dart';
+import '../screens/tabs/tab_4/temp.dart';
 import '../services/images_service.dart';
 import 'side_bar.dart';
 import '../screens/auth/login_screen.dart';
@@ -35,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         drawer: SideBar(),
         body: NestedScrollView(
@@ -56,7 +58,6 @@ class _HomePageState extends State<HomePage> {
                     Tab(child: Icon(Icons.home)),
                     Tab(child: Icon(Icons.date_range_rounded)),
                     Tab(child: Icon(Icons.photo_camera_back)),
-                    Tab(child: Icon(Icons.map)),
                     Tab(child: Icon(Icons.bar_chart_rounded)),
                   ],
                 ),
@@ -64,11 +65,12 @@ class _HomePageState extends State<HomePage> {
             ];
           },
           body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            dragStartBehavior: DragStartBehavior.down,
             children: <Widget>[
               MainHomeScreen(),
               CalendarScreen(),
               Icon(Icons.date_range, size: 350),
-              Icon(Icons.photo_camera_back, size: 350),
               Icon(Icons.bar_chart, size: 350),
             ],
           ),

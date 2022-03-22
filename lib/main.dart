@@ -12,6 +12,7 @@ import 'screens/edit_entry_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/tabs/tab_4/map_screen.dart';
 import 'screens/view_entry_screen.dart';
 import 'services/entry_data_service.dart';
 import 'services/firestore_service.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
         ActivityCategorizedEntryListView.routeName: (ctx) =>
             ActivityCategorizedEntryListView(),
         TagsCategorizedListView.routeName: (ctx) => TagsCategorizedListView(),
+        MapScreen.routeName: (ctx) => MapScreen(),
       },
     );
   }
