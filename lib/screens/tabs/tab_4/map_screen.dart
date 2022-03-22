@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -16,16 +18,10 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(7.8731, 80.7718),
-    zoom: 50,
+  static final CameraPosition restingPosition = CameraPosition(
+    target: LatLng(7.8774222, 80.7003428),
+    zoom: 7.5,
   );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
@@ -35,7 +31,6 @@ class _MapScreenState extends State<MapScreen> {
   getMarkerData() {
     entries.get().then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        print(doc.data());
         initMarker(doc.data(), doc.id);
       }
     });
@@ -47,20 +42,23 @@ class _MapScreenState extends State<MapScreen> {
     String formatedDate = DateFormat('dd MMM, EEE, h:mm a').format(dt);
 
     String entrySummery = snapDoc["content_summery"];
-    print(entrySummery);
+    // print(entrySummery);
 
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(snapDoc['lat'], snapDoc['long']),
       infoWindow: InfoWindow(
           title: formatedDate,
+          onTap: () {
+            print('lol');
+          },
           snippet: entrySummery.length >= 10
               ? '${entrySummery.substring(0, 20)}...'
               : entrySummery),
     );
     setState(() {
       markers[markerId] = marker;
-      print('markers map thing============ = $markers');
+      // print('markers map thing============ = $markers');
     });
   }
 
@@ -78,22 +76,11 @@ class _MapScreenState extends State<MapScreen> {
         mapToolbarEnabled: false,
         markers: Set<Marker>.of(markers.values),
         mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
+        initialCameraPosition: restingPosition,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: _goToTheLake,
-      //   label: Text('To the lake!'),
-      //   icon: Icon(Icons.directions_boat),
-
-      // ),
     );
-  }
-
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }
