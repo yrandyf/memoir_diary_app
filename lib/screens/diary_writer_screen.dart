@@ -348,9 +348,8 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                                 contentSummery:
                                     _controller.plainTextEditingValue.text,
                                 timeStamp: DateTime.now(),
-                                location: place == null
-                                    ? 'null'
-                                    : '${place!.locality}, ${place!.country}',
+                                location:
+                                    place == null ? 'null' : place.toString(),
                                 mood: selectedMood?.name,
                                 image_list: _tempImageList,
                                 position: selectedActivity?.name,

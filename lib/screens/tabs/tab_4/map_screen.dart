@@ -6,6 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../../../models/Entry.dart';
+import '../../../services/entry_data_service.dart';
+import '../../../services/firestore_service.dart';
+import '../../view_entry_screen.dart';
 
 class MapScreen extends StatefulWidget {
   static const routeName = '/mapscreen';
@@ -25,9 +31,10 @@ class _MapScreenState extends State<MapScreen> {
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
-  String uid = FirebaseAuth.instance.currentUser!.uid;
-  CollectionReference entries =
-      FirebaseFirestore.instance.collection('entries');
+  var entries = FirebaseFirestore.instance
+      .collection('entries')
+      .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+
   getMarkerData() {
     entries.get().then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
@@ -40,17 +47,28 @@ class _MapScreenState extends State<MapScreen> {
     final MarkerId markerId = MarkerId(docId);
     DateTime dt = (snapDoc["entry_date"] as Timestamp).toDate();
     String formatedDate = DateFormat('dd MMM, EEE, h:mm a').format(dt);
-
     String entrySummery = snapDoc["content_summery"];
-    // print(entrySummery);
-
     final Marker marker = Marker(
       markerId: markerId,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       position: LatLng(snapDoc['lat'], snapDoc['long']),
       infoWindow: InfoWindow(
           title: formatedDate,
-          onTap: () {
-            print('lol');
+          onTap: () async {
+            List entires = (await Provider.of<FirestoreService>(context,
+                        listen: false)
+                    .getEntriesSnap())
+                .map((tags) {
+                  return Entry.fromDocument(tags);
+                })
+                .where((entry) =>
+                    entry.userId == FirebaseAuth.instance.currentUser!.uid &&
+                    entry.entryId == docId)
+                .toList();
+            Entry selectedEntry = entires[0];
+            Navigator.of(context).pushNamed(ViewEntryScreen.routeName);
+            Provider.of<EntryBuilderService>(context, listen: false)
+                .setEntry(selectedEntry);
           },
           snippet: entrySummery.length >= 10
               ? '${entrySummery.substring(0, 20)}...'
@@ -58,7 +76,6 @@ class _MapScreenState extends State<MapScreen> {
     );
     setState(() {
       markers[markerId] = marker;
-      // print('markers map thing============ = $markers');
     });
   }
 

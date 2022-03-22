@@ -78,4 +78,9 @@ class FirestoreService extends ChangeNotifier {
       await _firestore.collection('tags').get().then((snaps) {
         return snaps.docs;
       });
+  Future<List<QueryDocumentSnapshot>> getEntriesSnap() async =>
+      await _firestore.collection('entries').get().then((snaps) {
+        // print(snaps.docs);
+        return snaps.docs;
+      });
 }

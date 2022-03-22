@@ -62,7 +62,11 @@ class SideBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.map),
             title: Text('Map'),
-            onTap: () => {Navigator.of(context).pushNamed(MapScreen.routeName)},
+            onTap: () => {
+              Navigator.of(context)
+                  .pushNamed(MapScreen.routeName)
+                  .then((_) => Navigator.of(context).pop())
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),
@@ -131,10 +135,6 @@ class SideBar extends StatelessWidget {
                                 querytags.userId ==
                                 FirebaseAuth.instance.currentUser!.uid)
                             .toList();
-
-                        // List filteredUserTagList = userTagsList
-                        //     .where((tagsSet) => tags.contains(tagsSet.tag))
-                        //     .toList();
 
                         return ListView.builder(
                           padding: EdgeInsets.zero,

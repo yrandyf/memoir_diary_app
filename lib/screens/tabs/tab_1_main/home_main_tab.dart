@@ -55,7 +55,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 scrollDirection: Axis.vertical,
                 slivers: <Widget>[
                   SliverAppBar(
-                    automaticallyImplyLeading: false,
                     iconTheme: const IconThemeData(
                       color: Colors.black,
                     ),
