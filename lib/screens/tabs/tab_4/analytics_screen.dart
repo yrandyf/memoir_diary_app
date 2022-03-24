@@ -85,8 +85,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                mainAxisSpacing: 5,
-                crossAxisSpacing: 5,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
                 mainAxisExtent: 115,
                 childAspectRatio: 1),
             delegate: SliverChildBuilderDelegate((context, index) {
@@ -110,17 +110,19 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 elevation: 5,
                 child: SfCircularChart(
                   title: ChartTitle(
-                      text: 'Mood Statistics', alignment: ChartAlignment.near),
+                      text: 'Activity Statistics',
+                      alignment: ChartAlignment.near),
                   legend: Legend(
                       isVisible: true,
                       overflowMode: LegendItemOverflowMode.wrap),
-                  tooltipBehavior: _toolTipBehaviour,
+                  tooltipBehavior: _toolTipBehaviour2,
                   series: <CircularSeries>[
-                    PieSeries<MoodPieChartClass, String?>(
-                        dataSource: _moodData,
-                        xValueMapper: (MoodPieChartClass mood, _) => mood.mood,
-                        yValueMapper: (MoodPieChartClass mood, _) =>
-                            mood.moodCount,
+                    PieSeries<ActivityPieChartClass, String?>(
+                        dataSource: _actData,
+                        xValueMapper: (ActivityPieChartClass activity, _) =>
+                            activity.activity,
+                        yValueMapper: (ActivityPieChartClass activity, _) =>
+                            activity.actCount,
                         dataLabelSettings:
                             const DataLabelSettings(isVisible: true),
                         enableTooltip: true)
@@ -141,14 +143,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   legend: Legend(
                       isVisible: true,
                       overflowMode: LegendItemOverflowMode.wrap),
-                  tooltipBehavior: _toolTipBehaviour2,
+                  tooltipBehavior: _toolTipBehaviour,
                   series: <CircularSeries>[
-                    PieSeries<ActivityPieChartClass, String?>(
-                        dataSource: _actData,
-                        xValueMapper: (ActivityPieChartClass activity, _) =>
-                            activity.activity,
-                        yValueMapper: (ActivityPieChartClass activity, _) =>
-                            activity.actCount,
+                    PieSeries<MoodPieChartClass, String?>(
+                        dataSource: _moodData,
+                        xValueMapper: (MoodPieChartClass mood, _) => mood.mood,
+                        yValueMapper: (MoodPieChartClass mood, _) =>
+                            mood.moodCount,
                         dataLabelSettings:
                             const DataLabelSettings(isVisible: true),
                         enableTooltip: true)
