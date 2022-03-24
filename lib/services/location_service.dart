@@ -30,6 +30,11 @@ class LocationService extends ChangeNotifier {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark place = placemarks[0];
     return place;
-    // print('{$place.locality, $place.country}');
+  }
+
+  Future<Placemark> getAddressFromGoogleCoordinates(lat, long) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
+    Placemark place = placemarks[0];
+    return place;
   }
 }

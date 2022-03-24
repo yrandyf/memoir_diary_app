@@ -1,60 +1,107 @@
 // import 'dart:async';
+// import 'dart:math';
+
+// import 'package:google_api_headers/google_api_headers.dart';
 // import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:flutter_google_places/flutter_google_places.dart';
+// import 'package:google_maps_webservice/places.dart';
 
-// import 'sample_map_screen.dart';
-
-// class MapScreen extends StatefulWidget {
-//   const MapScreen({Key? key}) : super(key: key);
+// class PlaceAutoComplete extends StatefulWidget {
+//   const PlaceAutoComplete({Key? key}) : super(key: key);
 
 //   @override
-//   State<MapScreen> createState() => _MapScreenState();
+//   State<PlaceAutoComplete> createState() => _PlaceAutoCompleteState();
 // }
 
-// class _MapScreenState extends State<MapScreen> {
-//   Completer<GoogleMapController> _controller = Completer();
+// class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
+//   final homeScaffoldKey = GlobalKey<ScaffoldState>();
+//   final searchScaffoldKey = GlobalKey<ScaffoldState>();
+// Mode _mode = Mode.overlay;
+// Widget _buildDropdownMenu() => DropdownButton(
+//         value: _mode,
+//         items: <DropdownMenuItem<Mode>>[
+//           DropdownMenuItem<Mode>(
+//             child: Text("Overlay"),
+//             value: Mode.overlay,
+//           ),
+//           DropdownMenuItem<Mode>(
+//             child: Text("Fullscreen"),
+//             value: Mode.fullscreen,
+//           ),
+//         ],
+//         onChanged: (m) {
+//           setState(() {
+//             _mode = m;
+//           });
+//         },
+//       );
 
-//   static final CameraPosition _kGooglePlex = CameraPosition(
-//     target: LatLng(37.42796133580664, -122.085749655962),
-//     zoom: 14.4746,
-//   );
+//       Future<void> _handlePressButton() async {
+//     // show input autocomplete with selected mode
+//     // then get the Prediction selected
+//     Prediction p = await PlacesAutocomplete.show(
+//       context: context,
+//       apiKey: kGoogleApiKey,
+//       onError: onError,
+//       mode: _mode,
+//       language: "fr",
+//       decoration: InputDecoration(
+//         hintText: 'Search',
+//         focusedBorder: OutlineInputBorder(
+//           borderRadius: BorderRadius.circular(20),
+//           borderSide: BorderSide(
+//             color: Colors.white,
+//           ),
+//         ),
+//       ),
+//       components: [Component(Component.country, "fr")],
+//     );
 
-//   static final CameraPosition _kLake = CameraPosition(
-//       bearing: 192.8334901395799,
-//       target: LatLng(37.43296265331129, -122.08832357078792),
-//       tilt: 59.440717697143555,
-//       zoom: 19.151926040649414);
+//     displayPrediction(p, homeScaffoldKey.currentState);
+//   }
+// }
+
+// Future<Null> displayPrediction(Prediction p, ScaffoldState scaffold) async {
+//   if (p != null) {
+//     // get detail (lat/lng)
+//     GoogleMapsPlaces _places = GoogleMapsPlaces(
+//       apiKey: kGoogleApiKey,
+//       apiHeaders: await GoogleApiHeaders().getHeaders(),
+//     );
+//     PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
+//     final lat = detail.result.geometry.location.lat;
+//     final lng = detail.result.geometry.location.lng;
+
+//     scaffold.showSnackBar(
+//       SnackBar(content: Text("${p.description} - $lat/$lng")),
+//     );
+//   }
+// }
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       body: SizedBox(
-//         height: MediaQuery.of(context).size.height,
-//         width: MediaQuery.of(context).size.width,
-//         // child: IconButton(
-//         // icon: Icon(Icons.abc_outlined),
-//         // onPressed: () {
-//         //   Navigator.of(context).pushNamed(MapTemp.routeName);
-//         // }),
-//         child: GoogleMap(
-//           mapType: MapType.hybrid,
-//           initialCameraPosition: _kGooglePlex,
-//           onMapCreated: (GoogleMapController controller) {
-//             _controller.complete(controller);
-//           },
-//         ),
+//       key: homeScaffoldKey,
+//       appBar: AppBar(
+//         title: Text("My App"),
 //       ),
-//       floatingActionButton: FloatingActionButton.extended(
-//         onPressed: () {
-//           Navigator.of(context).pushNamed(MapTemp.routeName);
-//         },
-//         label: Text('To the lake!'),
-//         icon: Icon(Icons.directions_boat),
-//       ),
+//       body: Center(
+//           child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           _buildDropdownMenu(),
+//           ElevatedButton(
+//             onPressed: _handlePressButton,
+//             child: Text("Search places"),
+//           ),
+//           ElevatedButton(
+//             child: Text("Custom"),
+//             onPressed: () {
+//               Navigator.of(context).pushNamed("/search");
+//             },
+//           ),
+//         ],
+//       )),
 //     );
-//   }
-
-//   Future<void> _goToTheLake() async {
-//     final GoogleMapController controller = await _controller.future;
-//     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
 //   }
 // }

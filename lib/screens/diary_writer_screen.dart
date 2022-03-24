@@ -14,9 +14,12 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/src/widgets/text.dart' as Text;
 import '../models/DropDownItem.dart';
+import '../models/GooglePlaceLocation.dart';
+import '../models/Place.dart';
 import '../models/Tag.dart';
 import '../services/entry_data_service.dart';
 import '../services/firestore_service.dart';
+import '../services/gplace_services.dart';
 import '../services/images_service.dart';
 import '../services/location_service.dart';
 import '../services/tag_Service.dart';
@@ -26,6 +29,7 @@ import '../widgets/tag_sheet.dart';
 import 'activty_temp.dart';
 import 'tabs/tab_1_main/home_main_tab.dart';
 import 'package:path/path.dart' as Path;
+import 'package:google_place/google_place.dart' as Gplaces;
 
 class DiaryWriterScreen extends StatefulWidget {
   static const routeName = '/writer';
@@ -42,13 +46,20 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
     selection: const TextSelection.collapsed(offset: 0),
   );
 
+  // @override
+  // void dispose() {
+  //   final applicationBloc =
+  //       Provider.of<GooglePlaceService>(context, listen: false).dispose();
+  //   super.dispose();
+  // }
+
   DateTime selectedEntryDate = DateTime.now();
   bool isLoading = false;
 
   firebase_storage.Reference? ref;
 
   CollectionReference? imgRef;
-
+  Place? gplaceLocation;
   _selectDate(BuildContext context) async {
     final DateTime? selectedDate = await showDatePicker(
       context: context,
@@ -84,15 +95,17 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   DropDownItems? selectedActivity;
   Placemark? place;
   Position? coordinates;
+  double? gPlaceLat;
+  double? gPlaceLong;
+
+  bool showList = false;
 
   List<File> _images = [];
   List<String> _tempImageList = [];
   CollectionReference? entryRef =
       FirebaseFirestore.instance.collection('entries');
 
-  // final _formKey = GlobalKey<FormState>();
-
-  _show(BuildContext ctx) {
+  _showLocationSheet(BuildContext ctx) {
     showModalBottomSheet(
       isScrollControlled: true,
       elevation: 5,
@@ -102,73 +115,151 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
           builder:
               (BuildContext context, void Function(void Function()) setState) {
             return Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-              child: Wrap(
-                children: [
-                  Form(
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Form(
-                        key: _formKey2,
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              controller: locationTextController,
-                              decoration: InputDecoration(
-                                labelText: 'Enter Location',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                child: Wrap(
+                  children: [
+                    Form(
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Form(
+                          key: _formKey2,
+                          child: Column(
+                            children: <Widget>[
+                              TextFormField(
+                                focusNode: FocusNode(),
+                                controller: locationTextController,
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Location',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.check),
+                                    onPressed: () {},
+                                  ),
                                 ),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.check),
-                                  onPressed: () {},
-                                ),
-                              ),
-                              validator: (value) {
-                                if (_formKey2.currentState!.validate()) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Enter a Valid City';
+                                validator: (value) {
+                                  if (_formKey2.currentState!.validate()) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Enter a Valid City';
+                                    }
                                   }
-                                }
-                              },
-                            ),
-                            const SizedBox(height: 15),
-                            Text.Text(
-                                place != null
-                                    ? '${place?.locality}, ${place?.country}'
-                                    : 'Select a Location',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500)),
-                            const SizedBox(height: 15),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.my_location,
-                                size: 45,
-                                color: Colors.blue,
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    Provider.of<GooglePlaceService>(context,
+                                            listen: false)
+                                        .placeSearch(value);
+                                  });
+                                },
                               ),
-                              onPressed: () async {
-                                Position position =
-                                    await Provider.of<LocationService>(context,
+                              Visibility(
+                                visible: Provider.of<GooglePlaceService>(
+                                        context,
+                                        listen: false)
+                                    .searchResults
+                                    .isNotEmpty,
+                                child: Container(
+                                  height: 220,
+                                  width: double.infinity,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white60,
+                                  ),
+                                  child: ListView.builder(
+                                    itemCount: Provider.of<GooglePlaceService>(
+                                            context,
                                             listen: false)
-                                        .getLocationCoordinates();
-                                Placemark location =
-                                    await Provider.of<LocationService>(context,
-                                            listen: false)
-                                        .getAddressFromCoordinates(position);
-                                setState(() {
-                                  coordinates = position;
-                                  place = location;
-                                  print(place?.country);
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 15),
-                          ],
+                                        .searchResults
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        leading: const Icon(Icons.location_on),
+                                        title: Text.Text(
+                                            '${Provider.of<GooglePlaceService>(context, listen: false).searchResults[index].description}'),
+                                        onTap: () async {
+                                          Place gplaceresults = await Provider
+                                                  .of<GooglePlaceService>(
+                                                      context,
+                                                      listen: false)
+                                              .getPlace(Provider.of<
+                                                          GooglePlaceService>(
+                                                      context,
+                                                      listen: false)
+                                                  .searchResults[index]
+                                                  .placeId as String);
+                                          setState(() {
+                                            Provider.of<GooglePlaceService>(
+                                                    context,
+                                                    listen: false)
+                                                .clearList();
+                                          });
+                                          FocusNode().unfocus();
+                                          locationTextController.clear();
+                                          print(
+                                              'front end print ${gplaceresults.geometry?.goolePlaceLocation?.lat}');
+                                          gPlaceLat = gplaceresults.geometry
+                                              ?.goolePlaceLocation?.lat;
+                                          gPlaceLong = gplaceresults.geometry
+                                              ?.goolePlaceLocation?.long;
+
+                                          Placemark glocation = await Provider
+                                                  .of<LocationService>(context,
+                                                      listen: false)
+                                              .getAddressFromGoogleCoordinates(
+                                                  gPlaceLat, gPlaceLong);
+                                          print('$gPlaceLat , $gPlaceLong');
+                                          place = glocation;
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              Text.Text(
+                                  place != null
+                                      ? '${place?.locality}, ${place?.country}'
+                                      : 'Select a Location',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500)),
+                              const SizedBox(height: 15),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.my_location,
+                                  size: 45,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () async {
+                                  Position position =
+                                      await Provider.of<LocationService>(
+                                              context,
+                                              listen: false)
+                                          .getLocationCoordinates();
+                                  Placemark location =
+                                      await Provider.of<LocationService>(
+                                              context,
+                                              listen: false)
+                                          .getAddressFromCoordinates(position);
+                                  setState(() {
+                                    coordinates = position;
+                                    gPlaceLat = coordinates?.latitude;
+                                    gPlaceLong = coordinates?.longitude;
+                                    place = location;
+                                    print(place?.country);
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 15),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
@@ -237,42 +328,8 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
               icon: const Icon(Icons.my_location_rounded),
               onPressed: () {
                 print(place);
-                _show(context);
+                _showLocationSheet(context);
               }),
-          // PopupMenuButton(
-          //   onSelected: (value) => setState(() {
-          //     locationModalSheet(context);
-          //   }),
-          //   icon: const Icon(Icons.my_location_rounded),
-          //   itemBuilder: (BuildContext bc) {
-          //     return [
-          //       PopupMenuItem(
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //           children: [
-          //             Icon(Icons.location_on, color: Colors.black),
-          //             Text.Text(place == null
-          //                 ? 'Current Location'
-          //                 : '${place.locality}, ${place.country}'),
-          //           ],
-          //         ),
-          //         onTap: () async {
-          //           locationModalSheet(context);
-          //           // Position position = await Provider.of<LocationService>(
-          //           //         context,
-          //           //         listen: false)
-          //           //     .getLocationCoordinates();
-          //           // Placemark location = await Provider.of<LocationService>(
-          //           //         context,
-          //           //         listen: false)
-          //           //     .getAddressFromCoordinates(position);
-          //           // place = location;
-          //           // print(place.country);
-          //         },
-          //       ),
-          //     ];
-          //   },
-          // ),
           _images.isNotEmpty
               ? Badge(
                   badgeColor: Colors.white70,
@@ -348,13 +405,14 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
                                 contentSummery:
                                     _controller.plainTextEditingValue.text,
                                 timeStamp: DateTime.now(),
-                                location:
-                                    place == null ? 'null' : place.toString(),
+                                location: place == null
+                                    ? 'null'
+                                    : '${place?.locality}, ${place?.country}',
                                 mood: selectedMood?.name,
                                 image_list: _tempImageList,
                                 position: selectedActivity?.name,
-                                lat: coordinates?.latitude,
-                                long: coordinates?.longitude,
+                                lat: gPlaceLat,
+                                long: gPlaceLong,
                                 tags: tags))
                             .whenComplete(
                           () {

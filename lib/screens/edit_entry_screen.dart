@@ -10,8 +10,10 @@ import 'package:memoir_diary_app/screens/tabs/tab_1_main/home_main_tab.dart';
 import 'package:memoir_diary_app/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../models/Entry.dart';
+import '../models/Place.dart';
 import '../models/Tag.dart';
 import '../services/entry_data_service.dart';
+import '../services/gplace_services.dart';
 import '../services/location_service.dart';
 import '../utils/icon_switch.dart';
 import '../widgets/edit_screen/edit_page_image_picker.dart';
@@ -43,26 +45,29 @@ List<DropDownItems> activities = <DropDownItems>[
   DropDownItems('Auto Detect', Icon(Icons.auto_fix_high))
 ];
 
-var selectedUser;
-List<dynamic>? selectedEntry;
-bool isLoading = false;
-var place;
-List<dynamic>? _tempImageList = [];
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-var tagTextController = TextEditingController();
-// String dropdownValue = 'One';
-
 class _EditEntryScreenState extends State<EditEntryScreen> {
   DropDownItems? selectedActivity;
   DropDownItems? selectedMood;
   List tagSearchSugestions = [];
   List tags = [];
-
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   List<dynamic>? selectedTags = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final tagTextController = TextEditingController();
   CollectionReference? entryRef =
       FirebaseFirestore.instance.collection('entries');
+  final locationTextController = TextEditingController();
+  // var selectedUser;
+  List<dynamic>? selectedEntry;
+  bool isLoading = false;
+  Placemark? place;
+  List<dynamic>? _tempImageList = [];
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // var tagTextController = TextEditingController();
+  double? gPlaceLat;
+  double? gPlaceLong;
+  Position? coordinates;
+  String? selectedLocation;
 
   late final quill.QuillController _controller = quill.QuillController(
     document: quill.Document.fromJson(selectedEntry as List<dynamic>),
@@ -114,6 +119,193 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
   //   Provider.of<EntryBuilderService>(context, listen: false).clear();
   // }
 
+  _showLocationSheet(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      elevation: 5,
+      context: ctx,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder:
+              (BuildContext context, void Function(void Function()) setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                child: Wrap(
+                  children: [
+                    Form(
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Form(
+                          key: _formKey2,
+                          child: Column(
+                            children: <Widget>[
+                              TextFormField(
+                                focusNode: FocusNode(),
+                                controller: locationTextController,
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Location',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.check),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (_formKey2.currentState!.validate()) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Enter a Valid City';
+                                    }
+                                  }
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    Provider.of<GooglePlaceService>(context,
+                                            listen: false)
+                                        .placeSearch(value);
+                                  });
+                                },
+                              ),
+                              Visibility(
+                                visible: Provider.of<GooglePlaceService>(
+                                        context,
+                                        listen: false)
+                                    .searchResults
+                                    .isNotEmpty,
+                                child: Container(
+                                  height: 220,
+                                  width: double.infinity,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white60,
+                                  ),
+                                  child: ListView.builder(
+                                    itemCount: Provider.of<GooglePlaceService>(
+                                            context,
+                                            listen: false)
+                                        .searchResults
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        leading: const Icon(Icons.location_on),
+                                        title: Text(
+                                            '${Provider.of<GooglePlaceService>(context, listen: false).searchResults[index].description}'),
+                                        onTap: () async {
+                                          Place gplaceresults = await Provider
+                                                  .of<GooglePlaceService>(
+                                                      context,
+                                                      listen: false)
+                                              .getPlace(Provider.of<
+                                                          GooglePlaceService>(
+                                                      context,
+                                                      listen: false)
+                                                  .searchResults[index]
+                                                  .placeId as String);
+                                          setState(() {
+                                            Provider.of<GooglePlaceService>(
+                                                    context,
+                                                    listen: false)
+                                                .clearList();
+                                          });
+                                          FocusNode().unfocus();
+                                          locationTextController.clear();
+
+                                          gPlaceLat = gplaceresults.geometry
+                                              ?.goolePlaceLocation?.lat;
+                                          Provider.of<EntryBuilderService>(
+                                                  context,
+                                                  listen: false)
+                                              .setLat(gPlaceLat as double);
+
+                                          gPlaceLong = gplaceresults.geometry
+                                              ?.goolePlaceLocation?.long;
+                                          Provider.of<EntryBuilderService>(
+                                                  context,
+                                                  listen: false)
+                                              .setLong(gPlaceLong as double);
+
+                                          Placemark glocation = await Provider
+                                                  .of<LocationService>(context,
+                                                      listen: false)
+                                              .getAddressFromGoogleCoordinates(
+                                                  gPlaceLat, gPlaceLong);
+                                          print('$gPlaceLat , $gPlaceLong');
+                                          place = glocation;
+                                          Provider.of<EntryBuilderService>(
+                                                  context,
+                                                  listen: false)
+                                              .setLocation(
+                                                  "${place?.locality}, ${place?.country}");
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                  place != null
+                                      ? '${place?.locality}, ${place?.country}'
+                                      : selectedLocation as String,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500)),
+                              const SizedBox(height: 15),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.my_location,
+                                  size: 45,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () async {
+                                  Position position =
+                                      await Provider.of<LocationService>(
+                                              context,
+                                              listen: false)
+                                          .getLocationCoordinates();
+                                  Placemark location =
+                                      await Provider.of<LocationService>(
+                                              context,
+                                              listen: false)
+                                          .getAddressFromCoordinates(position);
+                                  setState(() {
+                                    coordinates = position;
+                                    gPlaceLat = coordinates?.latitude;
+                                    Provider.of<EntryBuilderService>(context,
+                                            listen: false)
+                                        .setLat(gPlaceLat as double);
+                                    gPlaceLong = coordinates?.longitude;
+                                    Provider.of<EntryBuilderService>(context,
+                                            listen: false)
+                                        .setLong(gPlaceLong as double);
+
+                                    place = location;
+                                    Provider.of<EntryBuilderService>(context,
+                                            listen: false)
+                                        .setLocation(
+                                            "${place?.locality}, ${place?.country}");
+                                    print(place?.country);
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 15),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     tags =
@@ -128,7 +320,7 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
     _tempImageList = Provider.of<EntryBuilderService>(context, listen: false)
         .entry!
         .image_list;
-    place = Provider.of<EntryBuilderService>(context, listen: false)
+    selectedLocation = Provider.of<EntryBuilderService>(context, listen: false)
         .entry!
         .location;
     Entry? selectedDiaryEntry =
@@ -160,40 +352,11 @@ class _EditEntryScreenState extends State<EditEntryScreen> {
               print(tags);
             },
           ),
-          PopupMenuButton(
-            onSelected: (value) => setState(() {}),
-            icon: Icon(selectedDiaryEntry.location == null
-                ? Icons.add_location_outlined
-                : Icons.location_on_outlined),
-            itemBuilder: (BuildContext bc) {
-              return [
-                PopupMenuItem(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Icon(
-                          selectedDiaryEntry.location == null
-                              ? Icons.add_location_outlined
-                              : Icons.location_on_outlined,
-                          color: Colors.black),
-                      Text(place == null ? 'Get Current Location' : '$place'),
-                    ],
-                  ),
-                  onTap: () async {
-                    Position position = await Provider.of<LocationService>(
-                            context,
-                            listen: false)
-                        .getLocationCoordinates();
-                    Placemark location = await Provider.of<LocationService>(
-                            context,
-                            listen: false)
-                        .getAddressFromCoordinates(position);
-                    place = '${location.locality}, ${location.country}';
-                    Provider.of<EntryBuilderService>(context, listen: false)
-                        .setLocation(place);
-                  },
-                ),
-              ];
+          IconButton(
+            icon: Icon(Icons.location_on_outlined),
+            onPressed: () {
+              print(place);
+              _showLocationSheet(context);
             },
           ),
           IconButton(

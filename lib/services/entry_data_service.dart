@@ -49,6 +49,14 @@ class EntryBuilderService {
     _entry = _entry!.copyWith(tags: tags);
   }
 
+  void setLat(double lat) {
+    _entry = _entry!.copyWith(lat: lat);
+  }
+
+  void setLong(double long) {
+    _entry = _entry!.copyWith(long: long);
+  }
+
   void setEntry(Entry entry) {
     _entry = entry;
   }
