@@ -286,9 +286,11 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
         .where(
             (entry) => entry.userId == FirebaseAuth.instance.currentUser!.uid)
         .toList();
+        
     // print(tagSearchSugestions);
     setState(() {});
   }
+  
 
   @override
   void initState() {

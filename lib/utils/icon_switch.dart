@@ -41,3 +41,22 @@ setMoodIcon(String name) {
       return Icon(Icons.sentiment_very_satisfied_outlined);
   }
 }
+
+setMoodIconLarge(String name) {
+  switch (name) {
+    case "Happy":
+      print("Case Happy");
+      return Icon(Icons.sentiment_very_satisfied_outlined, size: 45);
+    case "Sad":
+      print("Case Sad");
+      return Icon(Icons.sentiment_dissatisfied_sharp, size: 45);
+    case "Average":
+      print("Case Average");
+      return Icon(Icons.sentiment_neutral_outlined, size: 45);
+    case "Dissatisfied":
+      print("Case Dissatisfied");
+      return Icon(Icons.sentiment_very_dissatisfied_outlined, size: 45);
+    default:
+      return Icon(Icons.sentiment_very_satisfied_outlined, size: 45);
+  }
+}

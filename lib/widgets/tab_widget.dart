@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../screens/search_screen.dart';
 import '../screens/tabs/tab_2/calender_screen.dart';
 import '../screens/tabs/tab_1_main/home_main_tab.dart';
-import '../screens/tabs/tab_4/temp.dart';
+import '../screens/tabs/tab_4/analytics_screen.dart';
 import '../services/images_service.dart';
 import 'side_bar.dart';
 import '../screens/auth/login_screen.dart';
@@ -65,13 +65,11 @@ class _HomePageState extends State<HomePage> {
             ];
           },
           body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            dragStartBehavior: DragStartBehavior.down,
             children: <Widget>[
               MainHomeScreen(),
               CalendarScreen(),
               Icon(Icons.date_range, size: 350),
-              Icon(Icons.bar_chart, size: 350),
+              AnalyticsScreen(),
             ],
           ),
         ),

@@ -59,6 +59,7 @@ dependencies:
   google_maps_flutter: ^2.1.2
   google_place: ^0.4.7
   http: ^0.13.4
+  syncfusion_flutter_charts: ^19.4.56
 
 flutter_icons:
   android: "launcher_icon"

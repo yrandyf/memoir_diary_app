@@ -5,7 +5,7 @@ import 'package:memoir_diary_app/screens/auth/login_screen.dart';
 import 'package:memoir_diary_app/services/firebase_user_auth.dart';
 import '../models/Tag.dart';
 import '../screens/categorized_tags_listview.dart';
-import '../screens/tabs/tab_4/map_screen.dart';
+import '../screens/map_screen/map_screen.dart';
 
 class SideBar extends StatelessWidget {
   @override

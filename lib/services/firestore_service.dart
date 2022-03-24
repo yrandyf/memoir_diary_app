@@ -17,6 +17,8 @@ class FirestoreService extends ChangeNotifier {
     }).toList();
   }
 
+
+
   Future<void> createEntry(Entry entry) async {
     var userEntries = FirebaseFirestore.instance.collection("entries");
     userEntries
