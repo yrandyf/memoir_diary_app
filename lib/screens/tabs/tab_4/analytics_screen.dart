@@ -1,14 +1,23 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:memoir_diary_app/models/Entry.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../../../models/Activity_Pie_Class.dart';
 import '../../../models/MoodPieChartClass.dart';
 import '../../../services/firestore_service.dart';
 import '../../../utils/icon_switch.dart';
+import 'dart:async';
+import 'dart:ui' as dart_ui;
+import 'package:path_provider/path_provider.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({Key? key}) : super(key: key);
@@ -26,6 +35,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   List<ActivityPieChartClass> _actData = [];
   TooltipBehavior? _toolTipBehaviour;
   TooltipBehavior? _toolTipBehaviour2;
+  final GlobalKey<SfCircularChartState> _chartKey = GlobalKey();
+  final GlobalKey<SfCircularChartState> _chartKey2 = GlobalKey();
 
   Future getDocs() async {
     QuerySnapshot<Map<String, dynamic>> userEntries = await FirebaseFirestore
@@ -60,6 +71,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     getDocs();
     setState(() {});
     super.initState();
+  }
+
+  Future<List<int>> _readImageData() async {
+    final dart_ui.Image data =
+        await _chartKey.currentState!.toImage(pixelRatio: 3.0);
+    final ByteData? bytes =
+        await data.toByteData(format: dart_ui.ImageByteFormat.png);
+    return bytes!.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
   }
 
   @override
@@ -109,6 +128,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               child: Card(
                 elevation: 5,
                 child: SfCircularChart(
+                  key: _chartKey2,
                   title: ChartTitle(
                       text: 'Activity Statistics',
                       alignment: ChartAlignment.near),
@@ -117,7 +137,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       overflowMode: LegendItemOverflowMode.wrap),
                   tooltipBehavior: _toolTipBehaviour2,
                   series: <CircularSeries>[
-                    PieSeries<ActivityPieChartClass, String?>(
+                    DoughnutSeries<ActivityPieChartClass, String?>(
                         dataSource: _actData,
                         xValueMapper: (ActivityPieChartClass activity, _) =>
                             activity.activity,
@@ -138,6 +158,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               child: Card(
                 elevation: 5,
                 child: SfCircularChart(
+                  key: _chartKey,
                   title: ChartTitle(
                       text: 'Mood Statistics', alignment: ChartAlignment.near),
                   legend: Legend(
@@ -158,11 +179,72 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 65,
+              width: double.infinity,
+              child: Row(
+                children: [
+                  const SizedBox(width: 8),
+                  OutlinedButton(
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(color: Colors.red),
+                          ),
+                        ),
+                      ),
+                      child: const Text('Generate Report'),
+                      onPressed: () async {
+                        var document = PdfDocument();
+                        PdfPage page = document.pages.add();
+
+                        dart_ui.Image data = await _chartKey.currentState!
+                            .toImage(pixelRatio: 1.0);
+
+                        final bytes = await data.toByteData(
+                            format: dart_ui.ImageByteFormat.png);
+
+                        final Uint8List imageBytes = bytes!.buffer.asUint8List(
+                            bytes.offsetInBytes, bytes.lengthInBytes);
+
+                        page.graphics.drawImage(PdfBitmap(imageBytes),
+                            const Rect.fromLTWH(80, 30, 300, 350));
+
+                        dart_ui.Image data2 = await _chartKey2.currentState!
+                            .toImage(pixelRatio: 1.0);
+
+                        final bytes2 = await data2.toByteData(
+                            format: dart_ui.ImageByteFormat.png);
+
+                        final Uint8List imageBytes2 = bytes2!.buffer
+                            .asUint8List(
+                                bytes2.offsetInBytes, bytes2.lengthInBytes);
+
+                        page.graphics.drawImage(PdfBitmap(imageBytes2),
+                            const Rect.fromLTWH(80, 400, 300, 350));
+
+                        var byteData = document.save();
+                        document.dispose();
+                        Directory directory =
+                            await getExternalStorageDirectory() as Directory;
+                        String path = directory.path;
+                        File file = File('$path/diarystats.pdf');
+                        await file.writeAsBytes(byteData, flush: true);
+                        OpenFile.open('$path/diarystats.pdf');
+                      }),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
 
 // body: SizedBox(
 //   height: 700,

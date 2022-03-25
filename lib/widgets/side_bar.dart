@@ -6,6 +6,7 @@ import 'package:memoir_diary_app/services/firebase_user_auth.dart';
 import '../models/Tag.dart';
 import '../screens/categorized_tags_listview.dart';
 import '../screens/map_screen/map_screen.dart';
+import '../screens/settings_screens/settings_screen.dart';
 
 class SideBar extends StatelessWidget {
   @override
@@ -51,17 +52,17 @@ class SideBar extends StatelessWidget {
                 ),
               ],
             ),
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
             onTap: () =>
                 {Navigator.of(context).popUntil((route) => route.isFirst)},
           ),
           ListTile(
-            leading: Icon(Icons.map),
-            title: Text('Map'),
+            leading: const Icon(Icons.map),
+            title: const Text('Map'),
             onTap: () => {
               Navigator.of(context)
                   .pushNamed(MapScreen.routeName)
@@ -69,13 +70,17 @@ class SideBar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () => {Navigator.of(context).pop()},
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () => {
+              Navigator.of(context)
+                  .pushNamed(SettingsScreen.routeName)
+                  .then((_) => Navigator.of(context).pop())
+            },
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
             onTap: () {
               FireBaseAuth.logout();
               Navigator.pushReplacement(
@@ -86,16 +91,6 @@ class SideBar extends StatelessWidget {
               );
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.exit_to_app),
-          //   title: Text('ExpansionPanel'),
-          //   onTap: () {
-          //     Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //             builder: (BuildContext context) => Expansiontile()));
-          //   },
-          // ),
           Column(
             children: <Widget>[
               // const SizedBox(height: 20.0),

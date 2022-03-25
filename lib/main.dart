@@ -11,6 +11,8 @@ import 'screens/mood_categorized_entry_list_view.dart';
 import 'screens/diary_writer_screen.dart';
 import 'screens/edit_entry_screen.dart';
 import 'screens/search_screen.dart';
+import 'screens/settings_screens/export_diary.dart';
+import 'screens/settings_screens/settings_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/view_entry_screen.dart';
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Lato',
       ),
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
@@ -77,6 +80,8 @@ class MyApp extends StatelessWidget {
             ActivityCategorizedEntryListView(),
         TagsCategorizedListView.routeName: (ctx) => TagsCategorizedListView(),
         MapScreen.routeName: (ctx) => MapScreen(),
+        SettingsScreen.routeName: (ctx) => SettingsScreen(),
+        ExportDiary.routeName: (ctx) => ExportDiary(),
       },
     );
   }
