@@ -9,7 +9,7 @@ import '/widgets/main_screen/delete_entry.dart';
 import '/models/Entry.dart';
 
 class EntryListItem extends StatefulWidget {
-  CollectionReference entryRef;
+  var entryRef;
 
   EntryListItem({
     Key? key,
@@ -36,8 +36,7 @@ class _EntryListItemState extends State<EntryListItem> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return EntryDeleteAlertDialog(
-                      entryRef: widget.entryRef, entry: widget.entry);
+                  return EntryDeleteAlertDialog(entry: widget.entry);
                 },
               )
             },

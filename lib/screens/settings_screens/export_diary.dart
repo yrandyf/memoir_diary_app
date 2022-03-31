@@ -56,13 +56,13 @@ class _ExportDiaryState extends State<ExportDiary> {
                       setState(() {
                         isLoading = true;
                       });
-
-                      final pdfFile = await PdfService.generateFile('ambo');
-                      PdfService.openFile(pdfFile);
+                      // final pdfFile = await PdfService.generateFile('ambo');
+                      PdfService.generateFile();
                       setState(() {
                         isLoading = false;
                       });
-                    }),
+                    },
+                  ),
           )
         ],
       ),

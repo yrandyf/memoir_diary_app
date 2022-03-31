@@ -289,11 +289,13 @@ class _SearchBarState extends State<SearchBar> {
                         stream: Stream.fromFuture(_operation(_searchTerm)),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return Container();
+                            return Center(
+                              child: Text('No Results'),
+                            );
                           } else {
                             List<AlgoliaObjectSnapshot>? entrySearchResults =
                                 snapshot.data;
-                            var userEntryList = snapshot.data!
+                            var userEntryList = entrySearchResults!
                                 .map((results) {
                                   return Entry(
                                     timeStamp:
@@ -320,7 +322,10 @@ class _SearchBarState extends State<SearchBar> {
 
                             switch (snapshot.connectionState) {
                               case ConnectionState.waiting:
-                                return Container();
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.blue,
+                                ));
                               default:
                                 if (snapshot.hasError) {
                                   return Center(
@@ -333,7 +338,7 @@ class _SearchBarState extends State<SearchBar> {
                                         delegate: SliverChildBuilderDelegate(
                                           (context, index) {
                                             Entry entry = userEntryList[index];
-                                            return _searchTerm.isNotEmpty
+                                            return userEntryList.isNotEmpty
                                                 ? InkWell(
                                                     onTap: () {
                                                       Navigator.of(context)
@@ -433,8 +438,7 @@ class _SearchBarState extends State<SearchBar> {
                                                   )
                                                 : Container();
                                           },
-                                          childCount:
-                                              entrySearchResults?.length ?? 0,
+                                          childCount: entrySearchResults.length,
                                         ),
                                       ),
                                     ],

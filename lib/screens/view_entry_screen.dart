@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:intl/intl.dart';
@@ -121,7 +120,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
 
                                     return const Center(
                                       child: CircularProgressIndicator(
-                                          color: Colors.blueAccent),
+                                          color: Colors.white),
                                     );
                                   },
                                   errorBuilder: (context, error, stackTrace) =>

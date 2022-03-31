@@ -7,11 +7,10 @@ import '/models/Entry.dart';
 class EntryDeleteAlertDialog extends StatelessWidget {
   const EntryDeleteAlertDialog({
     Key? key,
-    required this.entryRef,
     required this.entry,
   }) : super(key: key);
 
-  final CollectionReference<Object?> entryRef;
+  // final entryRef;
   final Entry entry;
 
   @override
