@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../models/AuthSwitchState.dart';
+import '../../models/LockScreen.dart';
 import '../../widgets/tab_widget.dart';
 import 'signup_screen.dart';
 import '../../services/firebase_user_auth.dart';
@@ -29,13 +31,26 @@ class _LoginPageState extends State<LoginPage> {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => HomePage(
-            user: user,
-          ),
-        ),
-      );
+      await AuthSwitchState().getAuthState().then((value) {
+        if (value == false) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => HomePage(user: user),
+            ),
+          );
+        } else {
+          // Fingerprint Integration
+          print('fingerprint');
+          LockScreen(context).userAuth(user: user, path: 'main');
+        }
+      });
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => HomePage(
+      //       user: user,
+      //     ),
+      //   ),
+      // );
     }
     return firebaseApp;
   }

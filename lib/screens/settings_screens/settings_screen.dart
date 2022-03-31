@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'auth_settings_screen.dart';
 import 'export_diary.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -25,6 +26,17 @@ class SettingsScreen extends StatelessWidget {
             leading: const Icon(Icons.color_lens),
             title: const Text('Appearances'),
             onTap: () => {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.alarm),
+            title: const Text('Reminder'),
+            onTap: () => {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.fingerprint),
+            title: const Text('Privacy'),
+            onTap: () =>
+                {Navigator.of(context).pushNamed(AuthSettings.routeName)},
           ),
         ],
       ),

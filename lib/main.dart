@@ -11,6 +11,7 @@ import 'screens/mood_categorized_entry_list_view.dart';
 import 'screens/diary_writer_screen.dart';
 import 'screens/edit_entry_screen.dart';
 import 'screens/search_screen.dart';
+import 'screens/settings_screens/auth_settings_screen.dart';
 import 'screens/settings_screens/export_diary.dart';
 import 'screens/settings_screens/settings_screen.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
         MapScreen.routeName: (ctx) => MapScreen(),
         SettingsScreen.routeName: (ctx) => SettingsScreen(),
         ExportDiary.routeName: (ctx) => ExportDiary(),
+        AuthSettings.routeName: (ctx)=> AuthSettings(),
       },
     );
   }
