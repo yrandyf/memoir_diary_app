@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'models/theme.dart';
+import 'models/theme_switch_state.dart';
 import 'screens/activity_categorized_list.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/activty_temp.dart';
@@ -63,45 +64,40 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ThemeChanger>(
-      create: (_) => ThemeChanger(ThemeData.dark()),
-      child: MaterialAppWithTheme(),
-    );
-  }
-}
-
-class MaterialAppWithTheme extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Provider.of<ThemeChanger>(context);
-    return MaterialApp(
-      theme: theme.getTheme(),
-      // ThemeData(
-      //   primarySwatch: Colors.blue,
-      //   fontFamily: 'Lato',
-      // ),
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-      routes: {
-        SignUpPage.routeName: (ctx) => SignUpPage(),
-        LoginPage.routeName: (ctx) => LoginPage(),
-        DiaryWriterScreen.routeName: (ctx) => DiaryWriterScreen(),
-        MainHomeScreen.routeName: (ctx) => MainHomeScreen(),
-        ActivityRecognitionApp.routeName: (ctx) => ActivityRecognitionApp(),
-        ViewEntryScreen.routeName: (ctx) => ViewEntryScreen(),
-        EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
-        SearchBar.routeName: (ctx) => SearchBar(),
-        MoodCategorizedEntryListView.routeName: (ctx) =>
-            MoodCategorizedEntryListView(),
-        ActivityCategorizedEntryListView.routeName: (ctx) =>
-            ActivityCategorizedEntryListView(),
-        TagsCategorizedListView.routeName: (ctx) => TagsCategorizedListView(),
-        MapScreen.routeName: (ctx) => MapScreen(),
-        SettingsScreen.routeName: (ctx) => SettingsScreen(),
-        ExportDiary.routeName: (ctx) => ExportDiary(),
-        AuthSettings.routeName: (ctx) => AuthSettings(),
-        ReminderSettings.routeName: (ctx) => ReminderSettings(),
-        ThemeSettings.routeName: (ctx) => ThemeSettings(),
-      },
+      create: (_) => ThemeChanger(),
+      child: Consumer<ThemeChanger>(
+        builder: (context, ThemeChanger themeNotifier, child) {
+          return MaterialApp(
+            theme:
+                themeNotifier.darkTheme ? ThemeData.dark() : ThemeData.light(),
+            debugShowCheckedModeBanner: false,
+            home: LoginPage(),
+            routes: {
+              SignUpPage.routeName: (ctx) => SignUpPage(),
+              LoginPage.routeName: (ctx) => LoginPage(),
+              DiaryWriterScreen.routeName: (ctx) => DiaryWriterScreen(),
+              MainHomeScreen.routeName: (ctx) => MainHomeScreen(),
+              ActivityRecognitionApp.routeName: (ctx) =>
+                  ActivityRecognitionApp(),
+              ViewEntryScreen.routeName: (ctx) => ViewEntryScreen(),
+              EditEntryScreen.routeName: (ctx) => EditEntryScreen(),
+              SearchBar.routeName: (ctx) => SearchBar(),
+              MoodCategorizedEntryListView.routeName: (ctx) =>
+                  MoodCategorizedEntryListView(),
+              ActivityCategorizedEntryListView.routeName: (ctx) =>
+                  ActivityCategorizedEntryListView(),
+              TagsCategorizedListView.routeName: (ctx) =>
+                  TagsCategorizedListView(),
+              MapScreen.routeName: (ctx) => MapScreen(),
+              SettingsScreen.routeName: (ctx) => SettingsScreen(),
+              ExportDiary.routeName: (ctx) => ExportDiary(),
+              AuthSettings.routeName: (ctx) => AuthSettings(),
+              ReminderSettings.routeName: (ctx) => ReminderSettings(),
+              ThemeSettings.routeName: (ctx) => ThemeSettings(),
+            },
+          );
+        },
+      ),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/AuthSwitchState.dart';
+import 'package:provider/provider.dart';
+import '../../models/theme.dart';
+import '../../models/theme_switch_state.dart';
 import '../../models/LockScreen.dart';
 
 class ThemeSettings extends StatefulWidget {
@@ -12,34 +14,37 @@ class ThemeSettings extends StatefulWidget {
 
 class _ThemeSettingsState extends State<ThemeSettings> {
   bool isSwitched = false;
-  // @override
-  // void initState() {
-  //   AuthSwitchState().getAuthState().then((state) {
-  //     setState(() {
-  //       isSwitched = state;
-  //     });
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    ThemeSwitchState().getSwitchState().then((state) {
+      setState(() {
+        isSwitched = state;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Appearances')),
-      body: ListTile(
-        title: const Text('Switch Theme'),
-        subtitle: const Text('Switch Between Light/ Dark Themes'),
-        trailing: Switch(
-          value: isSwitched,
-          onChanged: (value) {
-            setState(() {
-              isSwitched = value;
-            });
-          },
-          activeTrackColor: Colors.blue,
-          activeColor: Colors.blueAccent,
-        ),
-        onTap: () => {},
+      body: Consumer<ThemeChanger>(
+        builder: (context, themeChanger, child) {
+          return ListTile(
+            title: const Text('Switch Theme'),
+            subtitle: const Text('Switch Between Light/ Dark Themes'),
+            trailing: Switch(
+              value: themeChanger.darkTheme,
+              onChanged: (value) async {
+                themeChanger.toggleTheme();
+              },
+              activeTrackColor: Colors.blue,
+              activeColor: Colors.blueAccent,
+            ),
+            onTap: () => {},
+          );
+        },
       ),
     );
   }

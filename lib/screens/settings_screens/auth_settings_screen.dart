@@ -20,6 +20,7 @@ class _AuthSettingsState extends State<AuthSettings> {
         isSwitched = state;
       });
     });
+
     super.initState();
   }
 
@@ -36,6 +37,7 @@ class _AuthSettingsState extends State<AuthSettings> {
             setState(() {
               isSwitched = value;
             });
+            AuthSwitchState().saveAuthSwtich(value);
             LockScreen(context).userAuth(path: 'settings', value: value);
           },
           activeTrackColor: Colors.blue,
