@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'auth_settings_screen.dart';
 import 'export_diary.dart';
+import 'set_reminder.dart';
+import 'theming.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';
@@ -25,12 +27,14 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.color_lens),
             title: const Text('Appearances'),
-            onTap: () => {},
+            onTap: () =>
+                {Navigator.of(context).pushNamed(ThemeSettings.routeName)},
           ),
           ListTile(
             leading: const Icon(Icons.alarm),
             title: const Text('Reminder'),
-            onTap: () => {},
+            onTap: () =>
+                {Navigator.of(context).pushNamed(ReminderSettings.routeName)},
           ),
           ListTile(
             leading: const Icon(Icons.fingerprint),

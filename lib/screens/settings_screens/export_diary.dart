@@ -21,13 +21,26 @@ class _ExportDiaryState extends State<ExportDiary> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 80, bottom: 19),
-            child: SvgPicture.asset(
-              'assets/images/login.svg',
-              width: double.infinity,
-              height: 260.0,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 80, bottom: 19),
+                child: SvgPicture.asset(
+                  'assets/images/export.svg',
+                  width: 300,
+                  height: 260.0,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          const Text("Export All Your Memories!"),
+          const SizedBox(
+            height: 40,
           ),
           SizedBox(
             width: 170,

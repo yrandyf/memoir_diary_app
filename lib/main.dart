@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/firebase_options.dart';
 import 'package:provider/provider.dart';
+import 'models/theme.dart';
 import 'screens/activity_categorized_list.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/activty_temp.dart';
@@ -13,7 +14,9 @@ import 'screens/edit_entry_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/settings_screens/auth_settings_screen.dart';
 import 'screens/settings_screens/export_diary.dart';
+import 'screens/settings_screens/set_reminder.dart';
 import 'screens/settings_screens/settings_screen.dart';
+import 'screens/settings_screens/theming.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/view_entry_screen.dart';
@@ -59,11 +62,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider<ThemeChanger>(
+      create: (_) => ThemeChanger(ThemeData.dark()),
+      child: MaterialAppWithTheme(),
+    );
+  }
+}
+
+class MaterialAppWithTheme extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Lato',
-      ),
+      theme: theme.getTheme(),
+      // ThemeData(
+      //   primarySwatch: Colors.blue,
+      //   fontFamily: 'Lato',
+      // ),
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
       routes: {
@@ -83,7 +98,9 @@ class MyApp extends StatelessWidget {
         MapScreen.routeName: (ctx) => MapScreen(),
         SettingsScreen.routeName: (ctx) => SettingsScreen(),
         ExportDiary.routeName: (ctx) => ExportDiary(),
-        AuthSettings.routeName: (ctx)=> AuthSettings(),
+        AuthSettings.routeName: (ctx) => AuthSettings(),
+        ReminderSettings.routeName: (ctx) => ReminderSettings(),
+        ThemeSettings.routeName: (ctx) => ThemeSettings(),
       },
     );
   }

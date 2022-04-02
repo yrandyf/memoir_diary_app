@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/models/Entry.dart';
 import 'package:provider/provider.dart';
+import '../../../models/NotificationHandler.dart';
 import '../../../services/firestore_service.dart';
 import '/widgets/main_screen/entry_list_item.dart';
 import '/widgets/main_screen/flexible_space_widget.dart';
@@ -22,6 +23,22 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       .orderBy("entry_date", descending: true);
 
   String uid = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  void initState() {
+    NotificationHandler.init();
+    listenNotification();
+    super.initState();
+  }
+
+  listenNotification() {
+    NotificationHandler.onNotifications.stream.listen(onClickedNotification);
+  }
+
+  onClickedNotification(String? payload) {
+    Navigator.of(context).pushNamed(DiaryWriterScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
