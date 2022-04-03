@@ -110,8 +110,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                         borderRadius:
                                             BorderRadius.circular(30.0))),
                               ),
-                              onPressed: () => Navigator.of(context)
-                                  .pushNamed(DiaryWriterScreen.routeName))
+                              onPressed: () => Navigator.of(context).pushNamed(
+                                  DiaryWriterScreen.routeName,
+                                  arguments: selectedDate))
                         ],
                       ),
                     ),

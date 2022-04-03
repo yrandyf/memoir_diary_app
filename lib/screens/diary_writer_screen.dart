@@ -33,8 +33,9 @@ import 'package:google_place/google_place.dart' as Gplaces;
 
 class DiaryWriterScreen extends StatefulWidget {
   static const routeName = '/writer';
-
-  const DiaryWriterScreen({Key? key}) : super(key: key);
+  DiaryWriterScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _DiaryWriterScreenState createState() => _DiaryWriterScreenState();
@@ -54,6 +55,7 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
   // }
 
   DateTime selectedEntryDate = DateTime.now();
+
   bool isLoading = false;
 
   firebase_storage.Reference? ref;
@@ -286,11 +288,10 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
         .where(
             (entry) => entry.userId == FirebaseAuth.instance.currentUser!.uid)
         .toList();
-        
+
     // print(tagSearchSugestions);
     setState(() {});
   }
-  
 
   @override
   void initState() {
@@ -300,6 +301,9 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    selectedEntryDate = ModalRoute.of(context)!.settings.arguments != null
+        ? ModalRoute.of(context)!.settings.arguments as DateTime
+        : DateTime.now();
     return Scaffold(
       appBar: AppBar(
         title: TextButton(
