@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../screens/search_screen.dart';
 import '../screens/tabs/tab_2/calender_screen.dart';
 import '../screens/tabs/tab_1_main/home_main_tab.dart';
+import '../screens/tabs/tab_3/image_gallery.dart';
 import '../screens/tabs/tab_4/analytics_screen.dart';
 import '../services/images_service.dart';
 import 'side_bar.dart';
@@ -55,22 +56,10 @@ class _HomePageState extends State<HomePage> {
                 floating: true,
                 bottom: TabBar(
                   tabs: [
-                    Tab(
-                        child: Icon(
-                      Icons.home,
-                    )),
-                    Tab(
-                        child: Icon(
-                      Icons.date_range_rounded,
-                    )),
-                    Tab(
-                        child: Icon(
-                      Icons.photo_camera_back,
-                    )),
-                    Tab(
-                        child: Icon(
-                      Icons.bar_chart_rounded,
-                    )),
+                    Tab(child: Icon(Icons.home)),
+                    Tab(child: Icon(Icons.date_range_rounded)),
+                    Tab(child: Icon(Icons.photo_camera_back)),
+                    Tab(child: Icon(Icons.bar_chart_rounded)),
                   ],
                 ),
               ),
@@ -80,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               MainHomeScreen(),
               CalendarScreen(),
-              Icon(Icons.date_range, size: 350),
+              ImageGalleryTab(),
               AnalyticsScreen(),
             ],
           ),

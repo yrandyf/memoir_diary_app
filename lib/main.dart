@@ -20,6 +20,7 @@ import 'screens/settings_screens/settings_screen.dart';
 import 'screens/settings_screens/theming.dart';
 import 'screens/tabs/tab_1_main/home_main_tab.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/tabs/tab_3/view_images.dart';
 import 'screens/view_entry_screen.dart';
 import 'services/entry_data_service.dart';
 import 'services/firestore_service.dart';
@@ -94,6 +95,7 @@ class MyApp extends StatelessWidget {
               AuthSettings.routeName: (ctx) => AuthSettings(),
               ReminderSettings.routeName: (ctx) => ReminderSettings(),
               ThemeSettings.routeName: (ctx) => ThemeSettings(),
+              ImageViewer.routeName: (ctx) => ImageViewer(),
             },
           );
         },

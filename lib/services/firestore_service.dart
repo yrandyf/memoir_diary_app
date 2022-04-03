@@ -17,8 +17,6 @@ class FirestoreService extends ChangeNotifier {
     }).toList();
   }
 
-
-
   Future<void> createEntry(Entry entry) async {
     var userEntries = FirebaseFirestore.instance.collection("entries");
     userEntries
@@ -85,4 +83,26 @@ class FirestoreService extends ChangeNotifier {
         // print(snaps.docs);
         return snaps.docs;
       });
+
+  Future<List<Entry>> getFilteredEntries(DateTime selectedDay, String userId) {
+    // first 'where' gets everythings that is added at the begining of the selected date tilll the end of the selected date.
+
+    // second 'where' filter it again with 'isLessThan' to get entires with date of less than selected day + one day.
+    return _firestore
+        .collection('entries')
+        .where('entry_date',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(selectedDay).toDate())
+        .where('entry_date',
+            isLessThan:
+                Timestamp.fromDate(selectedDay.add(Duration(days: 1))).toDate())
+        .where('uid', isEqualTo: userId)
+        .get()
+        .then((value) {
+      print(value.docs.length);
+      return value.docs.map((doc) {
+        return Entry.fromDocument(doc);
+      }).toList();
+    });
+    
+  }
 }

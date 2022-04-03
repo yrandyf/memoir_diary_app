@@ -22,7 +22,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   var entryRef = FirebaseFirestore.instance
       .collection("entries")
       .orderBy("entry_date", descending: true);
-
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override

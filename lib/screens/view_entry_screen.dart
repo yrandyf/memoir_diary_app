@@ -270,6 +270,27 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 60,
+                width: double.infinity,
+                child: ListView.builder(
+                  itemCount: selectedEntry.tags!.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: Chip(
+                        label: Text('#${selectedEntry.tags![index]}'),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
