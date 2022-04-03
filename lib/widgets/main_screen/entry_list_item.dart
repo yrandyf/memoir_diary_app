@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../services/entry_data_service.dart';
+import '../../utils/icon_switch.dart';
 import '/screens/view_entry_screen.dart';
 import '/widgets/main_screen/delete_entry.dart';
 import '/models/Entry.dart';
@@ -111,29 +112,31 @@ class _EntryListItemState extends State<EntryListItem> {
                           Text(
                             DateFormat('MMMM d, yyyy')
                                 .format(widget.entry.date as DateTime),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          Icon(
-                            Icons.run_circle_outlined,
-                            size: 18,
-                          ),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          Text(widget.entry.position.toString()),
+                          if (widget.entry.position != null)
+                            setActivityIconListVIew(
+                                widget.entry.position.toString()),
+                          if (widget.entry.position != null)
+                            const SizedBox(
+                              width: 5,
+                            ),
+                          if (widget.entry.position != null)
+                            Text(widget.entry.position.toString()),
                           const SizedBox(
                             width: 10,
                           ),
-                          Icon(
-                            Icons.mood,
-                            size: 18,
-                          ),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          Text(widget.entry.mood.toString()),
+                          if (widget.entry.mood != null)
+                            setMoodIconListView(widget.entry.mood.toString()),
+                          if (widget.entry.mood != null)
+                            const SizedBox(
+                              width: 5,
+                            ),
+                          if (widget.entry.mood != null)
+                            Text(widget.entry.mood.toString()),
                           const SizedBox(
                             width: 10,
                           ),

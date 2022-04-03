@@ -55,10 +55,22 @@ class _HomePageState extends State<HomePage> {
                 floating: true,
                 bottom: TabBar(
                   tabs: [
-                    Tab(child: Icon(Icons.home)),
-                    Tab(child: Icon(Icons.date_range_rounded)),
-                    Tab(child: Icon(Icons.photo_camera_back)),
-                    Tab(child: Icon(Icons.bar_chart_rounded)),
+                    Tab(
+                        child: Icon(
+                      Icons.home,
+                    )),
+                    Tab(
+                        child: Icon(
+                      Icons.date_range_rounded,
+                    )),
+                    Tab(
+                        child: Icon(
+                      Icons.photo_camera_back,
+                    )),
+                    Tab(
+                        child: Icon(
+                      Icons.bar_chart_rounded,
+                    )),
                   ],
                 ),
               ),

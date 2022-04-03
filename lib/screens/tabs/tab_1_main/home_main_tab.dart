@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/models/Entry.dart';
 import 'package:provider/provider.dart';
 import '../../../models/NotificationHandler.dart';
+import '../../../models/theme.dart';
 import '../../../services/firestore_service.dart';
 import '/widgets/main_screen/entry_list_item.dart';
 import '/widgets/main_screen/flexible_space_widget.dart';
@@ -72,9 +73,12 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               slivers: <Widget>[
                 SliverAppBar(
                   iconTheme: const IconThemeData(
-                    color: Colors.black,
-                  ),
-                  backgroundColor: Colors.white,
+                      // color: Colors.black,
+                      ),
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  // ThemeChanger().darkTheme
+                  //     ? Colors.grey[850]
+                  //     : Colors.white,
                   pinned: true,
                   expandedHeight: 60,
                   flexibleSpace: FlexibleSpaceBar(

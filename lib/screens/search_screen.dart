@@ -114,18 +114,18 @@ class _SearchBarState extends State<SearchBar> {
                                       MoodCategorizedEntryListView.routeName,
                                       arguments: mood);
                                 }),
-                            IconButton(
-                                icon: Icon(
-                                  Icons.sentiment_very_dissatisfied_outlined,
-                                  size: 45,
-                                  color: Colors.blueGrey[200],
-                                ),
-                                onPressed: () {
-                                  String mood = "Dissatisfied";
-                                  Navigator.of(context).pushNamed(
-                                      MoodCategorizedEntryListView.routeName,
-                                      arguments: mood);
-                                }),
+                            // IconButton(
+                            //     icon: Icon(
+                            //       Icons.sentiment_very_dissatisfied_outlined,
+                            //       size: 45,
+                            //       color: Colors.blueGrey[200],
+                            //     ),
+                            //     onPressed: () {
+                            //       String mood = "Dissatisfied";
+                            //       Navigator.of(context).pushNamed(
+                            //           MoodCategorizedEntryListView.routeName,
+                            //           arguments: mood);
+                            //     }),
                           ]),
                       const SizedBox(height: 15),
                       const Divider(),
@@ -154,7 +154,7 @@ class _SearchBarState extends State<SearchBar> {
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.boy_outlined),
                               padding: EdgeInsets.all(0),
-                              backgroundColor: Colors.white,
+                              // backgroundColor: Colors.white,
                               label: Text('Standing'),
                             ),
                           ),
@@ -171,7 +171,7 @@ class _SearchBarState extends State<SearchBar> {
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.directions_walk),
                               padding: EdgeInsets.all(0),
-                              backgroundColor: Colors.white,
+                              // backgroundColor: Colors.white,
                               label: Text('Walking'),
                             ),
                           ),
@@ -188,7 +188,7 @@ class _SearchBarState extends State<SearchBar> {
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.chair),
                               padding: EdgeInsets.all(0),
-                              backgroundColor: Colors.white,
+                              // backgroundColor: Colors.white,
                               label: Text('Sitting'),
                             ),
                           ),
@@ -205,7 +205,7 @@ class _SearchBarState extends State<SearchBar> {
                                   left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
                               avatar: Icon(Icons.hotel),
                               padding: EdgeInsets.all(0),
-                              backgroundColor: Colors.white,
+                              // backgroundColor: Colors.white,
                               label: Text('Nap'),
                             ),
                           ),

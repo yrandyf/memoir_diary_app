@@ -8,28 +8,29 @@ class ThemeChanger with ChangeNotifier {
 
   ThemeChanger() {
     _darkTheme = true;
-    loadFromPrefs();
+    loadPrefs();
   }
+
   bool get darkTheme => _darkTheme;
 
   toggleTheme() {
     _darkTheme = !_darkTheme;
-    saveToPrefs();
+    savePrefs();
     notifyListeners();
   }
 
-  loadFromPrefs() async {
-    await _initPrefs();
+  loadPrefs() async {
+    await initPrefs();
     _darkTheme = prefs!.getBool(key) ?? true;
     notifyListeners();
   }
 
-  saveToPrefs() async {
-    await _initPrefs();
+  savePrefs() async {
+    await initPrefs();
     prefs!.setBool(key, darkTheme);
   }
 
-  _initPrefs() async {
+  initPrefs() async {
     if (prefs == null) prefs = await SharedPreferences.getInstance();
   }
 }

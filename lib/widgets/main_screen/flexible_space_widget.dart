@@ -99,20 +99,26 @@ class _FlexibleSpaceBackgroundState extends State<FlexibleSpaceBackground> {
                       padding: const EdgeInsets.only(bottom: 5.0),
                       child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            // color: Theme.of(context).colorScheme.onSecondary
                           ),
                           children: <TextSpan>[
                             TextSpan(
                               text: 'Hello ',
-                              style: const TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                             ),
                             TextSpan(
                               text:
                                   '${FirebaseAuth.instance.currentUser!.displayName.toString()}!',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                             ),
                           ],
                         ),
@@ -120,7 +126,9 @@ class _FlexibleSpaceBackgroundState extends State<FlexibleSpaceBackground> {
                     ),
                     Text(
                       '${greetings()}',
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
                     ),
                   ],
                 ),
@@ -151,7 +159,7 @@ class _FlexibleSpaceBackgroundState extends State<FlexibleSpaceBackground> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              ('${snapshot.data!.tempreature} °C'),
+                              ('${snapshot.data!.tempreature.toInt()} °C'),
                               style: TextStyle(fontSize: 26),
                             ),
                             Text(

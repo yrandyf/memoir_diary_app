@@ -6,6 +6,7 @@ import 'package:memoir_diary_app/models/Entry.dart';
 import 'package:provider/provider.dart';
 
 import '../services/entry_data_service.dart';
+import '../utils/icon_switch.dart';
 import 'edit_entry_screen.dart';
 
 class ViewEntryScreen extends StatefulWidget {
@@ -70,7 +71,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
             iconTheme: const IconThemeData(
               color: Colors.white,
             ),
-            backgroundColor: Colors.blue,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             pinned: true,
             expandedHeight: selectedEntry.image_list!.isNotEmpty
                 ? MediaQuery.of(context).size.width * 0.65
@@ -192,17 +193,18 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                   padding: const EdgeInsets.only(left: 10),
                   child: Row(
                     children: [
-                      Chip(
-                        labelPadding: const EdgeInsets.only(
-                            left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
-                        avatar: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.location_on_outlined),
+                      if (selectedEntry.location != 'null')
+                        Chip(
+                          labelPadding: const EdgeInsets.only(
+                              left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
+                          avatar: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.location_on_outlined),
+                          ),
+                          padding: const EdgeInsets.all(0),
+                          // backgroundColor: Colors.white,
+                          label: Text(selectedEntry.location.toString()),
                         ),
-                        padding: EdgeInsets.all(0),
-                        backgroundColor: Colors.white,
-                        label: Text(selectedEntry.location.toString()),
-                      ),
                     ],
                   ),
                 ),
@@ -210,37 +212,40 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                   padding: const EdgeInsets.only(left: 10),
                   child: Row(
                     children: [
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Chip(
-                          labelPadding: const EdgeInsets.only(
-                              left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
-                          avatar: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.accessibility),
+                      if (selectedEntry.position != null)
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Chip(
+                            labelPadding: const EdgeInsets.only(
+                                left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
+                            avatar: IconButton(
+                              onPressed: () {},
+                              icon: setActivityIconListVIew(
+                                  selectedEntry.position as String),
+                            ),
+                            padding: const EdgeInsets.all(0),
+                            // backgroundColor: Colors.white,
+                            label: Text(selectedEntry.position.toString()),
                           ),
-                          padding: EdgeInsets.all(0),
-                          backgroundColor: Colors.white,
-                          label: Text(selectedEntry.position.toString()),
                         ),
-                      ),
                       const SizedBox(
                         width: 10,
                       ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Chip(
-                          labelPadding: const EdgeInsets.only(
-                              left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
-                          avatar: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.tag_faces_outlined),
+                      if (selectedEntry.mood != null)
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Chip(
+                            labelPadding: const EdgeInsets.only(
+                                left: 9.0, right: 9.0, top: 3.0, bottom: 3.0),
+                            avatar: IconButton(
+                              onPressed: () {},
+                              icon: setMoodIcon(selectedEntry.mood as String),
+                            ),
+                            padding: const EdgeInsets.all(0),
+                            // backgroundColor: Colors.white,
+                            label: Text(selectedEntry.mood.toString()),
                           ),
-                          padding: EdgeInsets.all(0),
-                          backgroundColor: Colors.white,
-                          label: Text(selectedEntry.mood.toString()),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -249,7 +254,7 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
           ),
           SliverFillRemaining(
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(top: 10, left: 12, right: 12),
               child: quill.QuillEditor(
                 controller: _controller,
                 readOnly: true,
