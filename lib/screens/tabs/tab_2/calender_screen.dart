@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../widgets/main_screen/entry_list_item.dart';
 import '../../diary_writer_screen.dart';
-import '/models/Entry.dart';
+import '../../../models/Entry.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 

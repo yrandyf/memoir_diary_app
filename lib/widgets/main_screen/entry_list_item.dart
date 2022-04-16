@@ -8,7 +8,7 @@ import '../../services/entry_data_service.dart';
 import '../../utils/icon_switch.dart';
 import '/screens/view_entry_screen.dart';
 import '/widgets/main_screen/delete_entry.dart';
-import '/models/Entry.dart';
+import '../../models/Entry.dart';
 
 class EntryListItem extends StatefulWidget {
   var entryRef;

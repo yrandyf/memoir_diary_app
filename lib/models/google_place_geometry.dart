@@ -1,4 +1,4 @@
-import 'GooglePlaceLocation.dart';
+import 'google_place_location.dart';
 
 class GooglePlaceGeometry {
   final GooglePlaceLocation? goolePlaceLocation;

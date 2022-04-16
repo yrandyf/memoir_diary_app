@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/AuthSwitchState.dart';
-import '../../models/LockScreen.dart';
+import '../../models/auth_switch_state.dart';
+import '../../models/lock_screen.dart';
 
 class AuthSettings extends StatefulWidget {
   static const routeName = '/authSettings';

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:memoir_diary_app/models/DropDownItem.dart';
+import 'package:memoir_diary_app/models/drop_down_item.dart';
 import 'package:memoir_diary_app/screens/tabs/tab_1_main/home_main_tab.dart';
 import 'package:memoir_diary_app/services/firestore_service.dart';
 import 'package:provider/provider.dart';

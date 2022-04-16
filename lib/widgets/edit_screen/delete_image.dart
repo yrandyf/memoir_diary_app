@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/firestore_service.dart';
-import '/models/Entry.dart';
+import '../../models/Entry.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class ImageDeleteAlertDialog extends StatelessWidget {

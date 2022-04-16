@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-import '../models/GooglePlace.dart';
+import '../models/google_place.dart';
 import 'package:google_place/google_place.dart' as gp;
 import '../models/Place.dart';
 

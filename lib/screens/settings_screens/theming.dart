@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/theme.dart';
 import '../../models/theme_switch_state.dart';
-import '../../models/LockScreen.dart';
+import '../../models/lock_screen.dart';
 
 class ThemeSettings extends StatefulWidget {
   static const routeName = '/themeSettings';

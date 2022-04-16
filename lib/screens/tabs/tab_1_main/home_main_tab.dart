@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir_diary_app/models/Entry.dart';
 import 'package:provider/provider.dart';
-import '../../../models/NotificationHandler.dart';
+import '../../../models/notification_handler.dart';
 import '../../../models/theme.dart';
 import '../../../services/firestore_service.dart';
 import '/widgets/main_screen/entry_list_item.dart';

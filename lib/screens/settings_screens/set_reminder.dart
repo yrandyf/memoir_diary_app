@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../models/AuthSwitchState.dart';
-import '../../models/LockScreen.dart';
-import '../../models/NotificationHandler.dart';
+import '../../models/auth_switch_state.dart';
+import '../../models/lock_screen.dart';
+import '../../models/notification_handler.dart';
 
 class ReminderSettings extends StatefulWidget {
   static const routeName = '/ReminderSettings';

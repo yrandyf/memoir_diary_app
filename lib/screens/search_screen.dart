@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../models/AlgoliaAppInit.dart';
+import '../models/algolia_app_init.dart';
 import '../models/Entry.dart';
 import '../models/Tag.dart';
 import '../services/entry_data_service.dart';
@@ -386,7 +386,7 @@ class _SearchBarState extends State<SearchBar> {
                                                             ),
                                                             Text(
                                                               entry.position
-                                                                  as String,
+                                                                  .toString(),
                                                               style: TextStyle(
                                                                   fontSize: 15),
                                                             ),

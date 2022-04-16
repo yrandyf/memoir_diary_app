@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:memoir_diary_app/utils/string_extensions.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-import '../../models/Weather.dart';
+import '../../models/weather.dart';
 import 'package:http/http.dart' as http;
 
 class FlexibleSpaceBackground extends StatefulWidget {

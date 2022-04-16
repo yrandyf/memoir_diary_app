@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
 import '../widgets/tab_widget.dart';
-import 'AuthSwitchState.dart';
+import 'auth_switch_state.dart';
 
 class LockScreen {
   BuildContext? ctx;

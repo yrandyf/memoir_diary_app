@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../../models/Entry.dart';
+import '../../models/Entry.dart';
 import '../../../services/entry_data_service.dart';
 import '../../../services/firestore_service.dart';
 import '../view_entry_screen.dart';
