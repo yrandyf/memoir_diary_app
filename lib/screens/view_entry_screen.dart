@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../services/entry_data_service.dart';
 import '../utils/icon_switch.dart';
+import '../widgets/main_screen/delete_entry.dart';
 import 'edit_entry_screen.dart';
 
 class ViewEntryScreen extends StatefulWidget {
@@ -65,8 +66,26 @@ class _ViewEntryScreenState extends State<ViewEntryScreen> {
                   Navigator.of(context).pushNamed(EditEntryScreen.routeName);
                 },
               ),
-              IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.more_vert_outlined))
+              PopupMenuButton(
+                onSelected: (_) => {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return EntryDeleteAlertDialog(entry: selectedEntry);
+                    },
+                  ).then((_) => Navigator.of(context).pop())
+                },
+                icon: const Icon(Icons.more_vert),
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(color: Color(0xFFFE4A49)),
+                    ),
+                    value: 1,
+                  ),
+                ],
+              ),
             ],
             iconTheme: const IconThemeData(
               color: Colors.white,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../../screens/edit_entry_screen.dart';
 import '../../services/entry_data_service.dart';
 import '../../utils/icon_switch.dart';
 import '/screens/view_entry_screen.dart';
@@ -47,11 +48,16 @@ class _EntryListItemState extends State<EntryListItem> {
             label: 'Delete',
           ),
           SlidableAction(
-            onPressed: (context) => {},
+            onPressed: (context) {
+              Navigator.of(context).pushNamed(EditEntryScreen.routeName);
+              Provider.of<EntryBuilderService>(context, listen: false)
+                  .setEntry(widget.entry);
+              print(widget.entry.date);
+            },
             backgroundColor: const Color(0xFF21B7CA),
             foregroundColor: Colors.white,
-            icon: Icons.share,
-            label: 'Share',
+            icon: Icons.edit,
+            label: 'Edit',
           ),
         ],
       ),

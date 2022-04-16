@@ -301,9 +301,9 @@ class _DiaryWriterScreenState extends State<DiaryWriterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    selectedEntryDate = ModalRoute.of(context)!.settings.arguments != null
-        ? ModalRoute.of(context)!.settings.arguments as DateTime
-        : DateTime.now();
+    // selectedEntryDate = ModalRoute.of(context)!.settings.arguments != null
+    //     ? ModalRoute.of(context)!.settings.arguments as DateTime
+    //     : DateTime.now();
     return Scaffold(
       appBar: AppBar(
         title: TextButton(
